@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {detectCheckpoints,nextBoundary,evaluateAnswer,addCard} from '../src/learning.js';
+import {detectCheckpoints,nextBoundary,evaluateAnswer,addCard,rewardForCorrect,socialProofMessage} from '../src/learning.js';
 import {transcript,exercises} from '../src/lesson.js';
 const checkpoints=detectCheckpoints(transcript).map((c,i)=>({...c,...exercises[i]}));
 test('boundaries follow completed explanations',()=>assert.deepEqual(checkpoints.map(c=>c.time),[48,96,138]));
@@ -12,3 +12,8 @@ test('correct without reason requests explanation',()=>assert.equal(evaluateAnsw
 test('correct with reason completes',()=>assert.equal(evaluateAnswer(checkpoints[0],1,'Trọng số dựa vào ngữ cảnh'),'success'));
 test('unselected answer validates',()=>assert.equal(evaluateAnswer(checkpoints[0],null,'ví dụ'),'empty'));
 test('replay cannot duplicate flashcards or XP',()=>{const cards=addCard([],checkpoints[0],true);assert.equal(addCard(cards,checkpoints[0],false).length,1);assert.equal(cards[0].needsReview,true);});
+test('first correct completion earns base and first-try bonus',()=>assert.equal(rewardForCorrect({alreadyCompleted:false,firstTry:true}),30));
+test('correct answer after a retry earns base points only',()=>assert.equal(rewardForCorrect({alreadyCompleted:false,firstTry:false}),20));
+test('replaying a completed checkpoint earns no more points',()=>assert.equal(rewardForCorrect({alreadyCompleted:true,firstTry:true}),0));
+test('first-try social proof celebrates the learner against demo miss rate',()=>assert.equal(socialProofMessage({firstTry:true,missRate:90}),'Bạn đã vượt qua thử thách mà 90% người học chưa trả lời đúng ngay lần đầu!'));
+test('retry social proof rewards persistence without claiming first-try success',()=>assert.equal(socialProofMessage({firstTry:false,missRate:90}),'Bạn đã sửa đúng sau khi nhận gợi ý — đó cũng là một bước tiến đáng ghi nhận.'));
