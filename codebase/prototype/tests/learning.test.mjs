@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {detectCheckpoints,nextBoundary,evaluateAnswer,addCard,rewardForCorrect,socialProofMessage} from '../src/learning.js';
+import {detectCheckpoints,nextBoundary,evaluateAnswer,evaluateReason,addCard,rewardForCorrect,socialProofMessage,firstTryMissRate,firstTryAccuracy} from '../src/learning.js';
 import {transcript,exercises} from '../src/lesson.js';
 const checkpoints=detectCheckpoints(transcript).map((c,i)=>({...c,...exercises[i]}));
 test('boundaries follow completed explanations',()=>assert.deepEqual(checkpoints.map(c=>c.time),[48,96,138]));
@@ -17,3 +17,9 @@ test('correct answer after a retry earns base points only',()=>assert.equal(rewa
 test('replaying a completed checkpoint earns no more points',()=>assert.equal(rewardForCorrect({alreadyCompleted:true,firstTry:true}),0));
 test('first-try social proof celebrates the learner against demo miss rate',()=>assert.equal(socialProofMessage({firstTry:true,missRate:90}),'Bạn đã vượt qua thử thách mà 90% người học chưa trả lời đúng ngay lần đầu!'));
 test('retry social proof rewards persistence without claiming first-try success',()=>assert.equal(socialProofMessage({firstTry:false,missRate:90}),'Bạn đã sửa đúng sau khi nhận gợi ý — đó cũng là một bước tiến đáng ghi nhận.'));
+test('miss rate is calculated from current participant counts',()=>assert.equal(firstTryMissRate({participants:50,firstTryCorrect:5}),90));
+test('accuracy is calculated from current answer counts',()=>assert.equal(firstTryAccuracy({answered:25,firstTryCorrect:23}),92));
+test('empty cohorts return zero instead of a fixed percentage',()=>assert.equal(firstTryMissRate({participants:0,firstTryCorrect:0}),0));
+test('correct option with an incorrect explanation asks for revision',()=>assert.equal(evaluateAnswer(checkpoints[0],1,'Vì từ này đứng gần nhất'),'reason_feedback'));
+test('teacher rubric explains which idea is missing',()=>assert.deepEqual(evaluateReason(checkpoints[0],'Vì từ này đứng gần nhất'),{status:'revise',missing:['Mức độ liên quan theo ngữ cảnh','Kết hợp thông tin theo trọng số'],feedback:'Bạn đã chọn đúng đáp án, nhưng lý do chưa cho thấy attention dựa trên mức độ liên quan trong ngữ cảnh và kết hợp thông tin theo trọng số.'}));
+test('explanation matching teacher criteria passes the second review',()=>assert.deepEqual(evaluateReason(checkpoints[0],'Attention dùng trọng số để kết hợp các từ liên quan trong ngữ cảnh'),{status:'pass',missing:[],feedback:'Giải thích phù hợp với các ý chuẩn của giáo viên.'}));

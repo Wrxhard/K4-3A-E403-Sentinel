@@ -38,8 +38,17 @@ So với chỉ cho xem lại video hoặc chỉ tạo flashcard, **điểm dừn
 
 **Một học viên xem đoạn về attention trong `transcript-06` -> video dừng sau phần giải thích -> học viên chọn cách diễn giải đúng cho một ví dụ mới và nêu lý do -> AI đối chiếu transcript/slide, phản hồi có trích dẫn hoặc nói chưa đủ căn cứ -> học viên sửa hoặc bỏ qua -> nhận một flashcard ôn lại lỗi vừa mắc.**
 
-### Quyết định AI và kết quả cần chứng minh
+### Quyết định AI, Kết quả cần chứng minh và CP2 Design Principles
 
+- **CP2 Design Principles:**
+  - **Minimal Disruption:** Điểm dừng học tập (Learning pause) phải tự nhiên, không gây cảm giác bị chặn cứng (blocking).
+  - **Contextual Feedback:** AI phản hồi phải dựa vào transcript và slide (Conditional/Augment).
+  - **Learner Autonomy:** Học viên luôn có quyền bỏ qua điểm dừng (skip) để xem tiếp video.
 - **Mức automation:** Conditional/Augment. AI chỉ phản hồi khi có căn cứ trong transcript/slide; câu trả lời mơ hồ hoặc ngoài tài liệu phải nói rõ giới hạn và cho học viên xem nguồn.
-- **Kết quả demo tối thiểu:** một case đúng nhưng thiếu lý do, một case sai có gợi ý và cơ hội sửa, và một case học viên bỏ qua.
+- **CP2 Interactive Flow:**
+  - **Trigger:** Tự động dừng ở concept khó.
+  - **Challenge:** Học viên trả lời/giải thích ví dụ mới.
+  - **Verification:** AI check dựa trên nguồn.
+  - **Resolution:** Cho phép thử lại, hoặc bỏ qua và tự động lưu flashcard lỗi.
+- **Kết quả demo tối thiểu (Demo.mp4):** Cần thể hiện rõ flow này: một case đúng nhưng thiếu lý do, một case sai có gợi ý (kèm trích dẫn nguồn) và cơ hội sửa, và một case học viên chủ động bỏ qua.
 - **Giả thuyết cần validate:** sau điểm dừng, học viên giải được một câu mới cùng khái niệm và giải thích được lý do; không dùng điểm game làm bằng chứng học được.

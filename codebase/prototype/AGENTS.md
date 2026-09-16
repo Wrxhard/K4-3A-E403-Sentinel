@@ -4,6 +4,8 @@
 
 Vietnamese VLearn learning interface based on the user's screenshot. A concept checkpoint pauses the video and opens a quiz over the player. The learner can skip. Feedback includes a transcript source, then a flashcard is added to the right review panel. Follow Business_Canvas.md: wrong answers get hints and retry; correct answers require a short reason; XP does not prove mastery. Current video, transcript and detection are explicitly mocked.
 
+Gamification update: a first correct completion earns 20 XP plus a 10 XP first-try bonus. Replays never add points. Correct feedback may show encouraging cohort comparison, and the right panel includes a first-try accuracy leaderboard. Every cohort statistic, learner name and ranking in the prototype must remain visibly labeled as demo data until connected to a real analytics source.
+
 Run the local server yourself and open the preview in the browser available to this environment. Do not give the user server-start instructions when you can run it.
 
 Before making substantial visual changes, use the Product Design plugin's `get-context` skill when the visual source is unclear or no longer matches the current goal. When the user gives durable prototype-specific design feedback, preferences, or decisions, record them in `AGENTS.md`.

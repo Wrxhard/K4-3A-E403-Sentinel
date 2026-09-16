@@ -3,7 +3,7 @@
 Source visual truth: user-supplied VLearn screenshot in the conversation (1522 × 701), with the approved quiz overlay and right-hand flashcard panel additions. No source image file was supplied on disk. This is an adaptation of the learning interface, not a pixel-exact recreation of the original Day02 slide.
 
 Implementation: http://127.0.0.1:4173/.
-Saved browser evidence: `qa/desktop-checkpoint.png` (1008 × 695, capture returned by browser). Desktop runtime reports CSS viewport 1536 × 695, devicePixelRatio 1.25 and full content height 1048; returned image is scaled full-content evidence and is not a 1:1 pixel reference. Earlier native viewport captures and mobile captures are visible in the tool transcript. Mobile runtime tested at 390 × 844, document width 375 excluding scrollbar, without horizontal overflow. No precision pixel-match claim is made.
+Saved browser evidence: `qa/desktop-checkpoint.png` (checkpoint overlay) and `qa/leaderboard.png` (BXH with 100% first-try rate and 30 XP). Desktop runtime reports CSS viewport 1536 × 695, devicePixelRatio 1.25 and full content height 1048; returned images are scaled browser evidence and are not 1:1 pixel references. Earlier native viewport captures and mobile captures are visible in the tool transcript. Mobile runtime tested at 390 × 844, document width 375 excluding scrollbar, without horizontal overflow. No precision pixel-match claim is made.
 
 ## Visual findings and iteration
 
@@ -11,6 +11,7 @@ Saved browser evidence: `qa/desktop-checkpoint.png` (1008 × 695, capture return
 - Focused quiz: three readable choices, short reason input, hint, skip and submit actions appear inside the player. Quiz body scrolls on short displays; all actions remain reachable. Mobile uses the same overlay and stacks the review panel below the player.
 - P2 found during interaction QA: at an exact boundary the background slide and active transcript advanced to the next concept. Fixed by holding both to the active checkpoint. Post-fix browser state at 0:48 displays the Attention slide and its concluding transcript; saved screenshot shows that state.
 - Replay polish: completion cannot duplicate XP or cards; replay feedback now says XP was already received.
+- Gamification iteration: first-try completion displays +30 XP and an encouraging 90% comparison; retry completion displays +20 XP and a persistence message. The new BXH tab shows the learner's first-try rate, points and a clearly labeled demonstration leaderboard.
 
 ## Required surfaces
 
@@ -30,7 +31,7 @@ Saved browser evidence: `qa/desktop-checkpoint.png` (1008 × 695, capture return
 - Checkpoint 2 skip resumes playback and marks it skipped without adding another card.
 - Checkpoint 3 renders correctly at 390px. All choices, reasoning and footer actions are reachable.
 - Browser error/warning logs returned an empty list.
-- Final automated verification: 9 learning-model tests + 4 packaging tests passed; production build passed.
+- Final automated verification after dynamic-rate update: 17 learning-model tests and 4 packaging tests passed; production build passed.
 - Business_Canvas.md unchanged.
 
 ## Limits / follow-up polish

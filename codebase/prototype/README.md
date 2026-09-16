@@ -17,11 +17,12 @@ Mở http://127.0.0.1:4173/.
 
 1. Nhấn Play. Bắt đầu tại 0:35; đến 0:48 tự dừng và mở quiz Attention.
 2. Chọn A, kiểm tra: nhận gợi ý. Chọn B và chưa nhập lý do: được nhắc bổ sung.
-3. Nhập lý do, kiểm tra: nhận lời giải, nguồn transcript, flashcard cần ôn lại và 20 XP.
-4. Tiếp tục video, lật flashcard bên phải, chọn Đã hiểu hoặc Cần ôn lại.
-5. Nhấn checkpoint 2 trên timeline rồi Bỏ qua; playback tiếp tục, checkpoint được đánh dấu đã bỏ qua.
-6. Có thể mở lại checkpoint. Hoàn thành lại không thêm thẻ hay XP trùng.
-7. Nút Làm lại demo xóa tiến trình trong phiên hiện tại.
+3. Nhập lý do, kiểm tra: nhận lời giải, nguồn transcript, flashcard và điểm. Đúng ngay lần đầu nhận 30 XP; đúng sau gợi ý nhận 20 XP.
+4. Thông điệp so sánh tích cực xuất hiện sau câu đúng. Tỷ lệ được tính từ số lượt tham gia và số câu đúng lần đầu; prototype đang dùng các số đếm mẫu.
+5. Tiếp tục video để mở BXH tỷ lệ đúng lần đầu; tab Thẻ vẫn cho phép lật flashcard và chọn Đã hiểu hoặc Cần ôn lại.
+6. Nhấn checkpoint 2 trên timeline rồi Bỏ qua; playback tiếp tục, checkpoint được đánh dấu đã bỏ qua.
+7. Có thể mở lại checkpoint. Hoàn thành lại không thêm thẻ hay XP trùng.
+8. Nút Làm lại demo xóa tiến trình trong phiên hiện tại.
 
 ## Phạm vi mô phỏng
 
@@ -31,6 +32,7 @@ Mở http://127.0.0.1:4173/.
 - Đáp án và gợi ý có sẵn. Lý do cần được nhập nhưng chưa được chấm ngữ nghĩa; giao diện yêu cầu tự đối chiếu lời giải mẫu.
 - Không có backend, tài khoản, gửi dữ liệu hoặc lưu tiến trình sau reload. Chỉ bài Attention có nội dung demo.
 - XP đo sự tham gia, không khẳng định mức độ hiểu bài.
+- BXH và tên người học là dữ liệu minh họa; tỷ lệ không gắn cứng mà được tính từ `firstTryCorrect / answered`. Prototype yêu cầu tối thiểu 3 câu trước khi xếp hạng chính thức.
 
 ## Kiểm tra
 
