@@ -28,6 +28,8 @@ Học viên có thể đi tiếp dù chưa hiểu đoạn vừa học; nếu đ�
 - `2/3` chỉ muốn thử nếu **có thể bỏ qua**; `1/3` **không muốn**.
 - Các dạng tương tác được nêu: tự trả lời flashcard rồi xem đáp án, giải thích vì sao chọn, tìm lỗi trong một ví dụ.
 
+Link Form Khảo sát: https://docs.google.com/spreadsheets/d/1sPRRwjYKFJEt_7b1t-P94jsFEHrlYuCh6VdUUizwjwc/edit?usp=sharing
+
 Đây là tín hiệu ban đầu, chưa đạt chuẩn bằng chứng của guide (khảo sát >= 20 người hoặc mining có phương pháp đếm và ví dụ nguyên văn). Cần hỏi thêm lần gần nhất học viên xem lại đoạn khó và ghi thời gian/cách xử lý.
 
 ### Vì sao chọn hướng này?
