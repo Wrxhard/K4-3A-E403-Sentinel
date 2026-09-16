@@ -1,0 +1,14 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {detectCheckpoints,nextBoundary,evaluateAnswer,addCard} from '../src/learning.js';
+import {transcript,exercises} from '../src/lesson.js';
+const checkpoints=detectCheckpoints(transcript).map((c,i)=>({...c,...exercises[i]}));
+test('boundaries follow completed explanations',()=>assert.deepEqual(checkpoints.map(c=>c.time),[48,96,138]));
+test('forward seek pauses at first pending boundary',()=>assert.equal(nextBoundary(checkpoints,0,150,[]).time,48));
+test('skip and completion prevent repeated interruption',()=>assert.equal(nextBoundary(checkpoints,0,150,['attention']).time,96));
+test('backwards seek does not trigger',()=>assert.equal(nextBoundary(checkpoints,90,10,[]),undefined));
+test('wrong answer provides hint',()=>assert.equal(evaluateAnswer(checkpoints[0],0,'Mọi từ như nhau'),'hint'));
+test('correct without reason requests explanation',()=>assert.equal(evaluateAnswer(checkpoints[0],1,'  '),'reason'));
+test('correct with reason completes',()=>assert.equal(evaluateAnswer(checkpoints[0],1,'Trọng số dựa vào ngữ cảnh'),'success'));
+test('unselected answer validates',()=>assert.equal(evaluateAnswer(checkpoints[0],null,'ví dụ'),'empty'));
+test('replay cannot duplicate flashcards or XP',()=>{const cards=addCard([],checkpoints[0],true);assert.equal(addCard(cards,checkpoints[0],false).length,1);assert.equal(cards[0].needsReview,true);});
