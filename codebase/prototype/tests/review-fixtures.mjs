@@ -21,6 +21,7 @@ export const validReview = Object.freeze({
   verdict: 'correct',
   decision_code: 'RUBRIC_SATISFIED',
   passed: true,
+  quality_score: 5,
   misconceptions: [],
   missing_ideas: [],
   feedback: 'Bạn đã nêu đúng vai trò của ngữ cảnh và trọng số.',
