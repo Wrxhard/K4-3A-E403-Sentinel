@@ -34,9 +34,10 @@ test('returns validated review and writes prompt plus raw OpenAI response', asyn
       createId: () => 'call_test',
     });
 
-    assert.deepEqual(await reviewer.review(validInput()), validReview);
+    assert.deepEqual(await reviewer.review(validInput(), { caseId: 'GS-001' }), validReview);
     const trace = JSON.parse((await readFile(logPath, 'utf8')).trim());
     assert.equal(trace.request_id, 'call_test');
+    assert.equal(trace.case_id, 'GS-001');
     assert.equal(trace.status, 'success');
     assert.equal(trace.model, 'gpt-5-mini');
     assert.match(JSON.stringify(trace.prompt), /teacher_material/);

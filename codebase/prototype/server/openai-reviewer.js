@@ -42,7 +42,7 @@ export function createOpenAIReviewer({
   createId = randomUUID,
 } = {}) {
   return {
-    async review(input) {
+    async review(input, context = {}) {
       validateReviewInput(input, [input?.checkpointId]);
       if (!apiKey?.trim()) {
         throw new ReviewServiceError('missing_api_key', 'OPENAI_API_KEY chưa được cấu hình.');
@@ -92,6 +92,7 @@ export function createOpenAIReviewer({
             {
               timestamp,
               request_id: requestId,
+              case_id: context.caseId || null,
               status: 'success',
               model,
               latency_ms: Date.now() - startedAt,
@@ -120,6 +121,7 @@ export function createOpenAIReviewer({
             {
               timestamp,
               request_id: requestId,
+              case_id: context.caseId || null,
               status: 'error',
               model,
               latency_ms: Date.now() - startedAt,
