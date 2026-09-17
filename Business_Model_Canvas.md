@@ -16,21 +16,23 @@ Tự kiểm tra: bỏ AI đi, việc này vẫn tồn tại; hiện nay học vi
 
 Học viên có thể đi tiếp dù chưa hiểu đoạn vừa học; nếu đợi đến bài kiểm tra cuối bài thì lỗi hiểu sai bị phát hiện muộn. Cách mong muốn không phải là bị chặn cứng: học viên vẫn cần **được bỏ qua điểm dừng**, nhưng nếu tham gia thì phải tự trả lời trước, nhận gợi ý ngắn khi sai, rồi xem lời giải có nguồn.
 
-**Nỗi đau cần kiểm chứng thêm:** khảo sát hiện mới có 3 phản hồi và chưa ghi rõ cách các bạn đang xử lý, mất bao lâu, hoặc hậu quả khi hiểu sai. Vì vậy chưa nên khẳng định đây là pain lớn của toàn bộ lớp.
+**Nỗi đau đã có tín hiệu ban đầu nhưng vẫn cần kiểm chứng sâu:** khảo sát có 17 phản hồi; 16/17 từng gặp đoạn khó hoặc phải xem lại và 14/17 thường xuyên/đôi lúc chỉ nhận ra mình chưa hiểu khi làm bài. Tuy nhiên mẫu còn nhỏ, chưa ghi rõ thời gian xử lý hay hậu quả định lượng, nên chưa đại diện cho toàn bộ lớp.
 
 ## 4. Bằng chứng, hướng chọn và lát cắt thử nghiệm
 
-### Bằng chứng ban đầu từ khảo sát (n = 3)
+### Bằng chứng ban đầu từ khảo sát (n = 17)
 
-- `3/3` trả lời **Có** với nhu cầu/khó khăn liên quan đến việc học.
-- `2/3` chọn **xem lại đoạn khó**; `1/3` chọn **làm bài tập**.
-- Tần suất: `1/3` **thường xuyên**, `2/3` **hiếm khi**.
-- `2/3` chỉ muốn thử nếu **có thể bỏ qua**; `1/3` **không muốn**.
-- Các dạng tương tác được nêu: tự trả lời flashcard rồi xem đáp án, giải thích vì sao chọn, tìm lỗi trong một ví dụ.
+- `16/17` (94,1%) từng gặp đoạn khó hoặc phải xem lại.
+- `14/17` (82,4%) thường xuyên hoặc đôi lúc chỉ nhận ra mình chưa hiểu khi bắt đầu làm bài.
+- `16/17` (94,1%) muốn thử điểm dừng tương tác; trong đó `8/17` chỉ muốn thử nếu **có thể bỏ qua**.
+- `10/17` (58,8%) cho rằng **giải thích vì sao mình chọn** giúp biết mình thực sự hiểu nhất.
+- `15/17` (88,2%) sẵn lòng hoặc có thể sẵn lòng học thử flow này.
 
 Link Form Khảo sát: https://docs.google.com/spreadsheets/d/1sPRRwjYKFJEt_7b1t-P94jsFEHrlYuCh6VdUUizwjwc/edit?usp=sharing
 
-Đây là tín hiệu ban đầu, chưa đạt chuẩn bằng chứng của guide (khảo sát >= 20 người hoặc mining có phương pháp đếm và ví dụ nguyên văn). Cần hỏi thêm lần gần nhất học viên xem lại đoạn khó và ghi thời gian/cách xử lý.
+Tệp đã chuẩn hóa và bảng tính insight: [`evidence/survey/survey_normalized.csv`](evidence/survey/survey_normalized.csv) và [`evidence/survey/survey_summary.md`](evidence/survey/survey_summary.md).
+
+Đây là tín hiệu ban đầu, vẫn chưa đạt ngưỡng khảo sát >= 20 người của guide. Cần bổ sung ít nhất 3 phản hồi và phỏng vấn về lần gần nhất học viên xem lại đoạn khó, gồm thời gian, cách xử lý và hậu quả cụ thể.
 
 ### Vì sao chọn hướng này?
 
