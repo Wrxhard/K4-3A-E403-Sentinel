@@ -7,6 +7,9 @@
     "dev": "vite",
     "build": "vite build && node scripts/prepare-sites-build.mjs",
     "preview": "vite preview",
+    "test": "node --test tests/*.test.mjs",
+    "eval:validate": "node ../../eval/validate-golden.mjs",
+    "eval:run": "node ../../eval/run-eval.mjs",
     "test:sites": "node --test tests/sites-worker.test.mjs"
   },
   "dependencies": {

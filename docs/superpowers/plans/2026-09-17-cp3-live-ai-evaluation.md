@@ -6,7 +6,7 @@
 
 **Architecture:** The Vite development server exposes a server-only review endpoint backed by a shared OpenAI reviewer. The React quiz and the evaluation runner call the same decision module, while deterministic validators enforce response shape, golden-set coverage, and acceptance scoring.
 
-**Tech Stack:** Node.js 22, React 19, Vite 6, OpenAI JavaScript SDK and Responses API Structured Outputs, Node test runner, JSON/JSONL/Markdown evaluation artifacts.
+**Tech Stack:** Node.js 22, React 19, Vite 6, OpenAI Responses API Structured Outputs over native server-side `fetch`, Node test runner, JSON/JSONL/Markdown evaluation artifacts.
 
 **Spec:** `docs/superpowers/specs/2026-09-17-cp3-live-ai-evaluation-design.md`
 
@@ -28,7 +28,7 @@
 - Create `.gitignore`: protect the raw pack, secrets, and generated runtime logs at repository scope.
 - Create `codebase/prototype/.env.example`: document the OpenAI configuration without a key.
 - Create local-only `codebase/prototype/.env`: provide empty/configurable local values; ignored by Git.
-- Modify `codebase/prototype/package.json` and lockfile: add `openai`, `test`, and evaluation scripts.
+- Modify `codebase/prototype/package.json`: add `test` and evaluation scripts; Node 22 native `fetch` avoids an unnecessary runtime dependency.
 - Create `codebase/prototype/server/review-contract.js`: structured schema plus input/output validation.
 - Create `codebase/prototype/server/review-prompt.js`: construct the bounded teacher-grounded prompt.
 - Create `codebase/prototype/server/runtime-log.js`: append verifiable JSONL traces without secrets.
@@ -57,7 +57,6 @@
 - Create: `codebase/prototype/.env.example`
 - Create locally, never stage: `codebase/prototype/.env`
 - Modify: `codebase/prototype/package.json`
-- Modify: `codebase/prototype/package-lock.json`
 - Test: Git ignore checks and existing Node tests
 
 **Interfaces:**
@@ -100,13 +99,7 @@ OPENAI_MODEL=gpt-5-mini
 AI_LOG_PATH=./logs/ai-calls.jsonl
 ```
 
-- [ ] **Step 4: Install the official OpenAI SDK and add scripts**
-
-Run from `codebase/prototype`:
-
-```powershell
-npm.cmd install openai
-```
+- [ ] **Step 4: Add test and evaluation scripts**
 
 Add these scripts while preserving existing scripts:
 
@@ -130,7 +123,7 @@ Expected: both paths are ignored and the existing test suite passes.
 - [ ] **Step 6: Commit repository safety setup**
 
 ```powershell
-git add .gitignore codebase/prototype/.env.example codebase/prototype/package.json codebase/prototype/package-lock.json
+git add .gitignore codebase/prototype/.env.example codebase/prototype/package.json docs/superpowers/plans/2026-09-17-cp3-live-ai-evaluation.md
 git commit -m "chore: protect CP3 data and configure OpenAI"
 ```
 
@@ -149,7 +142,7 @@ git commit -m "chore: protect CP3 data and configure OpenAI"
 - Create: `codebase/prototype/tests/openai-reviewer.test.mjs`
 
 **Interfaces:**
-- Consumes: checkpoint objects from `src/lesson.js`, an injected `responses.create` function, and the environment contract from Task 1.
+- Consumes: checkpoint objects from `src/lesson.js`, an injected server-side `fetch` function, and the environment contract from Task 1.
 - Produces: `validateReviewInput(value)`, `validateReview(value)`, `buildReviewRequest(input)`, `appendTrace(trace, path)`, and `createOpenAIReviewer(options).review(input)`.
 
 - [ ] **Step 1: Write failing contract tests**
@@ -266,8 +259,8 @@ Assert returned real behavior and written JSONL content, not fake call counts.
 
 1. validate the input;
 2. build the request;
-3. call `client.responses.create(request)`;
-4. retain `response.output_text` as the raw model text;
+3. `POST` the request to `https://api.openai.com/v1/responses` with the bearer key using injected native `fetch`;
+4. read the OpenAI response JSON and retain `response.output_text` as the raw model text;
 5. parse and validate it;
 6. append a trace containing request ID, prompt payload, raw response, parsed review, token usage, latency, and status;
 7. throw typed errors on configuration, upstream, response-shape, or logging failures.
@@ -328,7 +321,7 @@ The handler must accept only `{ checkpointId, answer, explanation }`, look up th
 
 - [ ] **Step 3: Register the plugin and server-only configuration**
 
-Update `vite.config.mjs` to use `loadEnv(mode, process.cwd(), '')`, initialize `OpenAI` only inside the plugin, and register `aiReviewPlugin({ apiKey, model, logPath })` before `react()`.
+Update `vite.config.mjs` to use `loadEnv(mode, process.cwd(), '')` and register `aiReviewPlugin({ apiKey, model, logPath, fetchImpl: fetch })` before `react()`.
 
 - [ ] **Step 4: Write failing browser client tests**
 

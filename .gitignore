@@ -1,0 +1,10 @@
+codebase/data/
+codebase/prototype/.env
+codebase/prototype/.env.*
+!codebase/prototype/.env.example
+codebase/prototype/logs/
+codebase/prototype/node_modules/
+codebase/prototype/dist/
+codebase/prototype/.vite/
+*.log
+
