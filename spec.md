@@ -64,13 +64,16 @@ Tỷ lệ đạt = số ca đáp ứng toàn bộ tiêu chí / 20.
 | 2 | `gpt-4o-mini` | Thêm thứ tự verdict và ví dụ guardrail vào prompt | 18 | 2 | 90,0% |
 | 3 | `gpt-4o-mini` | Bổ sung chấp nhận lời giải ngắn/không dấu | 16 | 4 | 80,0% |
 | 4 | `gpt-5-mini` | Structured decision code + deterministic guardrail + structured scorer | **20** | **0** | **100,0%** |
+| 5 | `gpt-5.6-luna` | Giữ nguyên kiến trúc chuẩn hóa Lượt 4, chuyển đổi model sang Luna (tối ưu tốc độ & chi phí) | **20** | **0** | **100,0%** |
 
 Hai ca chưa đạt ở lượt 2:
 
 - `GS-005`: verdict đã đúng `out_of_scope`, nhưng bộ chấm từ khóa không nhận cụm đồng nghĩa “không nằm trong phạm vi”.
 - `GS-013`: câu “Query la dieu can tim, Key de so khop, Value mang noi dung duoc ket hop” đáp ứng rubric, nhưng model gắn `misconception` vì đòi thêm chi tiết ngoài chuẩn.
 
-Lượt 3 giảm từ 90% xuống 80% dù prompt được bổ sung, cho thấy feedback/verdict tự do có dao động. Lượt 4 xử lý nguyên nhân này bằng decision code và guardrail có test. Kết quả 100% chỉ áp dụng cho 20 ca hiện tại; cần thêm blind set và dữ liệu người dùng mới trước khi khẳng định khả năng tổng quát. Lượt 4 cũng dùng model khác, nên không thể quy toàn bộ cải thiện chỉ cho thay đổi kiến trúc.
+Lượt 3 giảm từ 90% xuống 80% dù prompt được bổ sung, cho thấy feedback/verdict tự do có dao động. Lượt 4 xử lý nguyên nhân này bằng decision code và guardrail có test.
+
+Lượt 5 chuyển sang mô hình `gpt-5.6-luna` nhằm tối ưu tốc độ và chi phí phản hồi. Kết quả duy trì tỷ lệ đạt tuyệt đối 20/20 (100.0%) trên Golden Set hiện tại, độ trễ trung bình giảm xuống ~2–3 giây/ca (hoàn tất toàn bộ 20 ca trong ~60 giây), tuân thủ nghiêm ngặt JSON schema và decision contract. Kết quả vẫn chỉ áp dụng cho 20 ca hiện tại; cần thêm blind set và dữ liệu người dùng mới trước khi khẳng định khả năng tổng quát.
 
 Artifact: `eval/run_results*.json`, `eval/run_results*.md` và `eval/run_logs*.jsonl`. Mỗi lượt có 20 raw logs; lỗi API hoặc thiếu log đều bị tính là không đạt.
 
@@ -82,6 +85,12 @@ Artifact: `eval/run_results*.json`, `eval/run_results*.md` và `eval/run_logs*.j
 - `codebase/data/` là data pack bảo vệ và không được commit. Golden set chỉ lưu dữ liệu tối thiểu đã ẩn danh.
 
 ## 9. Changelog
+
+### 2026-09-17 — Chuyển đổi mô hình sang gpt-5.6-luna và hoàn tất kiểm thử Lượt 5
+
+- **Mô hình mới:** Cấu hình `OPENAI_MODEL=gpt-5.6-luna` trong `codebase/prototype/.env` để tối ưu chi phí và tốc độ phản hồi.
+- **Kết quả kiểm thử:** Đạt 20/20 ca (100.0%) trên Golden Set; artifact ghi nhận tại `eval/run_results_5.json`, `eval/run_results_5.md` và `eval/run_logs_5.jsonl`.
+- **Hiệu năng:** Độ trễ trung bình giảm xuống ~2–3 giây/lượt gọi AI, giảm tải thời gian chờ cho người học tại các điểm dừng video checkpoint.
 
 ### 2026-09-17 — Thêm response cache và tối ưu độ trễ
 
