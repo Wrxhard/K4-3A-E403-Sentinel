@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ArrowRight, Cards, CheckCircle, FileText, Lightbulb, Play, SkipForward, Sparkle } from '@phosphor-icons/react';
-import { rewardForCorrect, timeLabel } from './learning';
+import { checkpointGuidance, rewardForCorrect, timeLabel } from './learning';
 import { reviewExplanation } from './reviewApi';
 
 const verdictHeading = {
@@ -56,6 +56,7 @@ export function Quiz({ checkpoint, onSkip, onComplete, alreadyCompleted = false 
   const active = useRef(true);
   const earnedPreviously = useRef(alreadyCompleted);
   const reviewing = feedback === 'reviewing';
+  const guidance = checkpointGuidance(answer, reason);
   const citedSources = (checkpoint.teacherSources || []).filter(source => aiReview?.source_ids.includes(source.id));
 
   useEffect(() => {
@@ -163,9 +164,14 @@ export function Quiz({ checkpoint, onSkip, onComplete, alreadyCompleted = false 
       </> : <form className="quiz-form" onSubmit={submit}>
         <div className="quiz-scroll" ref={scrollBody}>
         <div className="quiz-heading"><h2 id="quiz-title">Thử áp dụng điều vừa học</h2><p>Một câu ngắn về <strong>{checkpoint.concept}</strong>, rồi bạn có thể xem tiếp.</p></div>
+        <div className="checkpoint-steps" aria-label="Tiến trình checkpoint">
+          <div className={`checkpoint-step ${guidance.answer}`}><span>Bước 1/2</span><strong>Chọn đáp án</strong>{guidance.answer === 'complete' && <CheckCircle weight="fill"/>}</div>
+          <div className={`checkpoint-step ${guidance.reason}`}><span>Bước 2/2</span><strong>Giải thích lý do</strong>{guidance.reason === 'complete' && <CheckCircle weight="fill"/>}</div>
+        </div>
         <h3>{checkpoint.question}</h3>
         <div className="answers">{checkpoint.options.map((option, index) => <label key={option} className={`answer ${answer === index ? 'selected' : ''} ${feedback === 'hint' && answer === index ? 'incorrect' : ''}`}><input type="radio" name="answer" checked={answer === index} disabled={reviewing} onChange={() => { setAnswer(index); setFeedback(''); setAiReview(null); }}/><span className="answer-letter">{'ABC'[index]}</span><span>{option}</span></label>)}</div>
-        <label className="reason-label" htmlFor="reason">Vì sao bạn chọn đáp án này? <span>Một câu ngắn là đủ</span></label>
+        <label className="reason-label" htmlFor="reason"><strong>Bước 2/2 · Giải thích lý do</strong><span>Một câu ngắn là đủ</span></label>
+        <p className="reason-prompt">Vì sao bạn chọn đáp án này?</p>
         <textarea ref={reasonInput} id="reason" rows={2} value={reason} disabled={reviewing} maxLength={1200} onChange={event => { setReason(event.target.value); if (feedback === 'ai_error') setFeedback(''); }} placeholder="Mình nghĩ rằng…"/>
         <div className="quiz-feedback-region" ref={feedbackRegion} tabIndex={-1} aria-label="Phản hồi về câu trả lời" aria-live="polite">
           {reviewing && <div className="ai-reviewing"><Sparkle/><span>Đang kiểm tra lời giải theo bài học…</span></div>}
@@ -174,6 +180,7 @@ export function Quiz({ checkpoint, onSkip, onComplete, alreadyCompleted = false 
           {['hint', 'reason', 'empty'].includes(feedback) && <div className={`feedback ${feedback === 'hint' ? 'hint' : ''}`}><Lightbulb size={21}/><span>{feedback === 'hint' ? checkpoint.hint : feedback === 'reason' ? 'Hãy thêm lý do để kiểm tra mức hiểu bài.' : 'Bạn hãy chọn một đáp án.'}</span></div>}
           {feedback === 'ai_feedback' && <button type="button" className="edit-reason-button" onClick={editReason}>Sửa lý do <ArrowRight size={16}/></button>}
         </div>
+        <p className="checkpoint-instruction" aria-live="polite">{guidance.instruction}</p>
         </div>
         <div className="quiz-footer"><button type="button" className="text-button" onClick={skip}>Bỏ qua, xem tiếp video <SkipForward/></button><button type="submit" className="primary" disabled={reviewing}>{reviewing ? 'Đang kiểm tra…' : 'Kiểm tra lời giải'} {!reviewing && <ArrowRight/>}</button></div>
       </form>}

@@ -67,3 +67,12 @@ Artifact: `eval/run_results*.json`, `eval/run_results*.md` và `eval/run_logs*.j
 - Log gồm prompt, raw response, model review, guardrail signal, final parsed review, model, latency và request ID.
 - Không log header Authorization hoặc API key; `.env` và runtime log cục bộ bị `.gitignore`.
 - `codebase/data/` là data pack bảo vệ và không được commit. Golden set chỉ lưu dữ liệu tối thiểu đã ẩn danh.
+
+## 9. Changelog
+
+### 2026-09-17 — Điều chỉnh checkpoint sau validation R6
+
+- **Bằng chứng:** 3/3 người thử thực tế gặp khó khăn trong việc nhận biết khi nào chọn đáp án và khi nào giải thích lý do; hai người thường tự giải thích lại để kiểm tra mức hiểu, còn một người chỉ nhận ra lỗ hổng khi làm bài.
+- **Thay đổi trên sản phẩm:** checkpoint nay hiển thị rõ `Bước 1/2 · Chọn đáp án` và `Bước 2/2 · Giải thích lý do`. Trạng thái chuyển bước cập nhật theo thao tác thật của người học, kèm hướng dẫn ngắn trước khi gửi: chọn đáp án trước, giải thích tiếp theo, rồi kiểm tra lời giải.
+- **Giữ nguyên có chủ đích:** nút bỏ qua, loading state khi đánh giá và phản hồi dựa trên transcript/source vẫn được giữ vì phù hợp nhu cầu tự chủ của người học và là điểm mạnh đã được validation xác nhận.
+- **Phạm vi sau demo:** tiếp tục tối ưu nhịp dừng và thử nghiệm flow với nhiều checkpoint hơn; không mở rộng trong thay đổi này.

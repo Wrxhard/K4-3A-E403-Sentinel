@@ -4,6 +4,8 @@
 
 Vietnamese VLearn learning interface based on the user's screenshot. A concept checkpoint pauses the video and opens a quiz over the player. The learner can skip. Feedback includes a transcript source, then a flashcard is added to the right review panel. Follow Business_Canvas.md: wrong answers get hints and retry; correct answers require a short reason; XP does not prove mastery. Current video, transcript and detection are explicitly mocked.
 
+R6 validation decision (2026-09-17): external learners repeatedly confused the answer-selection step with the explanation step. Keep both actions, but present them as explicit Step 1/2 and Step 2/2 states with a short next-action instruction. Preserve a prominent skip action, visible review loading state, and transcript-grounded feedback.
+
 Gamification update: a first correct completion earns 20 XP plus a 10 XP first-try bonus. Replays never add points. Correct feedback may show encouraging cohort comparison, and the right panel includes a first-try accuracy leaderboard. Every cohort statistic, learner name and ranking in the prototype must remain visibly labeled as demo data until connected to a real analytics source.
 
 Run the local server yourself and open the preview in the browser available to this environment. Do not give the user server-start instructions when you can run it.

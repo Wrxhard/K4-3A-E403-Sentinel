@@ -21,6 +21,7 @@
 .quiz-feedback-region{scroll-margin-top:12px}
 .quiz-feedback-region:focus-visible{outline:2px solid #80aaca;outline-offset:2px;border-radius:7px}
 .edit-reason-button{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:8px 12px;margin-top:10px;border:1px solid #9dbbd1;border-radius:6px;color:#245c86;font-size:14px;font-weight:600}
+.checkpoint-steps{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:16px 0 9px}.checkpoint-step{display:flex;align-items:center;gap:7px;padding:8px 9px;border:1px solid #dce7ef;border-radius:7px;color:#657b8e;font-size:11px}.checkpoint-step span{display:flex;align-items:center;justify-content:center;min-height:20px;padding:3px 7px;border-radius:999px;background:#e9f2f8;color:#2c6f9f;font-size:9px;font-weight:750;white-space:nowrap}.checkpoint-step strong{font-size:11px}.checkpoint-step svg{width:15px;height:15px;margin-left:auto;color:#459577}.checkpoint-step.upcoming{opacity:.58}.checkpoint-step.current{border-color:#75a8cf;background:#f4f9fc}.checkpoint-step.current strong{color:#245f8c}.checkpoint-step.complete span{background:#eaf6ef;color:#397c62}.reason-label{margin-bottom:3px}.reason-prompt{margin-bottom:7px;color:#667d90;font-size:10px}.checkpoint-instruction{margin-top:12px;padding:9px 11px;border-left:3px solid #75a8cf;background:#f3f8fc;color:#496b84;font-size:10px;line-height:1.55}
 .quiz-heading h2{font-size:23px}.quiz-heading p,.success-heading p{font-size:14px;line-height:1.5}
 .quiz h3{font-size:16px;line-height:1.5}
 .answer{font-size:14px;min-height:48px;padding:11px 13px}
@@ -46,6 +47,7 @@
   .quiz h3{font-size:15px}
   .answer{font-size:14px;min-height:48px}
   .reason-label,.reason-label span{font-size:12px}
+  .checkpoint-step,.checkpoint-step strong{font-size:12px}.checkpoint-step span{font-size:10px}.checkpoint-instruction{font-size:11px}
   .quiz-footer .text-button,.quiz-footer .primary{font-size:13px}
   .quiz-footer .text-button{flex:1}
   .quiz .teacher-feedback>div:first-child span{font-size:13px}

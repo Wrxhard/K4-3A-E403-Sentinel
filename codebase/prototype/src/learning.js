@@ -8,4 +8,9 @@ export function rewardForCorrect({alreadyCompleted,firstTry}){if(alreadyComplete
 export function firstTryAccuracy({answered,firstTryCorrect}){if(!answered)return 0;return Math.round(Math.max(0,Math.min(firstTryCorrect,answered))/answered*100);}
 export function firstTryMissRate({participants,firstTryCorrect}){if(!participants)return 0;return 100-firstTryAccuracy({answered:participants,firstTryCorrect});}
 export function socialProofMessage({firstTry,missRate}){return firstTry?`Bạn đã vượt qua thử thách mà ${missRate}% người học chưa trả lời đúng ngay lần đầu!`:'Bạn đã sửa đúng sau khi nhận gợi ý — đó cũng là một bước tiến đáng ghi nhận.';}
+export function checkpointGuidance(answer,reason){
+  if(answer===null)return {answer:'current',reason:'upcoming',instruction:'Chọn một đáp án trước.'};
+  if(!reason.trim())return {answer:'complete',reason:'current',instruction:'Tiếp theo, giải thích ngắn vì sao bạn chọn đáp án này.'};
+  return {answer:'complete',reason:'complete',instruction:'Bạn đã hoàn thành 2 bước. Hãy kiểm tra lời giải.'};
+}
 export function timeLabel(time){return `${Math.floor(time/60)}:${String(Math.floor(time%60)).padStart(2,'0')}`;}

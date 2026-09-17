@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {detectCheckpoints,nextBoundary,evaluateAnswer,evaluateReason,addCard,rewardForCorrect,socialProofMessage,firstTryMissRate,firstTryAccuracy} from '../src/learning.js';
+import {detectCheckpoints,nextBoundary,evaluateAnswer,evaluateReason,addCard,rewardForCorrect,socialProofMessage,firstTryMissRate,firstTryAccuracy,checkpointGuidance} from '../src/learning.js';
 import {transcript,exercises} from '../src/lesson.js';
 const checkpoints=detectCheckpoints(transcript).map((c,i)=>({...c,...exercises[i]}));
 test('boundaries follow completed explanations',()=>assert.deepEqual(checkpoints.map(c=>c.time),[48,96,138]));
@@ -23,3 +23,8 @@ test('empty cohorts return zero instead of a fixed percentage',()=>assert.equal(
 test('correct option with an incorrect explanation asks for revision',()=>assert.equal(evaluateAnswer(checkpoints[0],1,'Vì từ này đứng gần nhất'),'reason_feedback'));
 test('teacher rubric explains which idea is missing',()=>assert.deepEqual(evaluateReason(checkpoints[0],'Vì từ này đứng gần nhất'),{status:'revise',missing:['Mức độ liên quan theo ngữ cảnh','Kết hợp thông tin theo trọng số'],feedback:'Bạn đã chọn đúng đáp án, nhưng lý do chưa cho thấy attention dựa trên mức độ liên quan trong ngữ cảnh và kết hợp thông tin theo trọng số.'}));
 test('explanation matching teacher criteria passes the second review',()=>assert.deepEqual(evaluateReason(checkpoints[0],'Attention dùng trọng số để kết hợp các từ liên quan trong ngữ cảnh'),{status:'pass',missing:[],feedback:'Giải thích phù hợp với các ý chuẩn của giáo viên.'}));
+test('checkpoint guidance moves learners from choosing to explaining',()=>{
+  assert.deepEqual(checkpointGuidance(null,''),{answer:'current',reason:'upcoming',instruction:'Chọn một đáp án trước.'});
+  assert.deepEqual(checkpointGuidance(1,''),{answer:'complete',reason:'current',instruction:'Tiếp theo, giải thích ngắn vì sao bạn chọn đáp án này.'});
+  assert.deepEqual(checkpointGuidance(1,'Attention dựa vào ngữ cảnh'),{answer:'complete',reason:'complete',instruction:'Bạn đã hoàn thành 2 bước. Hãy kiểm tra lời giải.'});
+});
