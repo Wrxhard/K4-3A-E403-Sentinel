@@ -67,3 +67,12 @@ Artifact: `eval/run_results*.json`, `eval/run_results*.md` và `eval/run_logs*.j
 - Log gồm prompt, raw response, model review, guardrail signal, final parsed review, model, latency và request ID.
 - Không log header Authorization hoặc API key; `.env` và runtime log cục bộ bị `.gitignore`.
 - `codebase/data/` là data pack bảo vệ và không được commit. Golden set chỉ lưu dữ liệu tối thiểu đã ẩn danh.
+
+## 9. Changelog
+| Thời điểm | Đổi gì | Vì sao (trỏ về feedback/case nào) |
+|---|---|---|
+| 2026-09-17 | Phân biệt rõ 2 hành động trong checkpoint: “Chọn đáp án” và “Giải thích lý do”; đồng thời làm rõ trạng thái chờ/skip khi video dừng. | Từ phản hồi: “Mình không biết là phải trả lời câu hỏi hay chỉ cần giải thích vì sao chọn cách đó.” và “Mình thấy bị dừng giữa chừng, nhưng không biết liệu mình cần dừng để trả lời hay cứ xem tiếp.” Đây là pain lặp lại nhất trong 3 user test. |
+| 2026-09-17 | Giữ nguyên mô hình feedback dựa trên transcript/source-grounded rationale. | Người dùng không phản đối định hướng source-first; họ phản đối sự mơ hồ về flow và trạng thái giao diện. Nên nhóm giữ nguyên source-based feedback, chỉ cải thiện UX của checkpoint. |
+| 2026-09-17 | Thêm hướng dẫn ngắn trước khi submit và ưu tiên nút bỏ qua rõ hơn. | User test cho thấy người học cần biết rõ “đủ hiểu” khi nào và khi nào có thể dừng; đây là điểm hỗ trợ quyết định trải nghiệm ở những đoạn video khó. |
+```
+
