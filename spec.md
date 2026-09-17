@@ -30,7 +30,19 @@ Output bắt buộc theo JSON schema nghiêm ngặt:
 
 Với ca chưa đạt, AI phải đưa feedback ngắn, ý cần bổ sung và một câu hỏi Socratic dựa trên câu hỏi/rubric mẫu của giáo viên. Không được bịa source ID hoặc tiết lộ toàn bộ đáp án.
 
-Guardrail xác định áp dụng cho các input chắc chắn: prompt injection, chỉ có dấu câu, hỏi lịch học, yêu cầu suy danh tính dữ liệu ẩn danh, chuyển sang tác vụ khác và yêu cầu chẩn đoán/kê thuốc. OpenAI vẫn được gọi và raw response vẫn được log; guardrail ngăn kết quả nguy hiểm được chuyển thành `correct`.
+Guardrail xác định áp dụng cho các input chắc chắn: prompt injection, chỉ có dấu câu, hỏi lịch học, yêu cầu suy danh tính dữ liệu ẩn danh, chuyển sang tác vụ khác và yêu cầu chẩn đoán/kê thuốc. Với cache miss, OpenAI được gọi và raw response được log; guardrail ngăn kết quả nguy hiểm được chuyển thành `correct`. Với cache hit, hệ thống trả phản hồi đã lưu mà không gọi OpenAI.
+
+### 3.1. Response Cache và tối ưu độ trễ
+
+Trước khi gọi OpenAI, server tra cứu cache theo `checkpoint_id`, lựa chọn của học viên và phần giải thích đã chuẩn hóa. Chuẩn hóa hiện xử lý chữ hoa/thường, dấu tiếng Việt và khoảng trắng; đây là đối sánh chính xác sau chuẩn hóa, chưa phải semantic matching giữa các cách diễn đạt đồng nghĩa.
+
+- Nếu cache hit, hệ thống trả phản hồi `ai_cached` hoặc phản hồi `human_verified` đã được giảng viên hiệu chỉnh mà không gọi OpenAI.
+- Nếu cache miss, hệ thống gọi Responses API với `reasoning.effort: low`, áp dụng validation và guardrail, sau đó chỉ lưu phản hồi đạt quality gate.
+- Chỉ cache phản hồi `correct` có `quality_score >= 4`, hoặc `misconception` có `quality_score >= 3` và chỉ ra ít nhất một hiểu sai cụ thể.
+- Không cache phản hồi `out_of_scope`, `INSTRUCTION_OVERRIDE`, `INSUFFICIENT_EXPLANATION` hoặc phản hồi chất lượng thấp.
+- Cache được khởi tạo từ Golden Set đã xác thực, lưu cục bộ dưới dạng JSONL và theo dõi số lượt hit. Hàng đợi audit ưu tiên các phản hồi được dùng nhiều nhưng có điểm chất lượng thấp; giảng viên có thể chấm lại hoặc ghi đè feedback, câu hỏi tiếp theo và nguồn trích dẫn.
+
+Cấu hình hiện tại giảm reasoning effort xuống `low` để tối ưu độ trễ; chưa loại bỏ hoàn toàn trường `reasoning` khỏi request.
 
 ## 4. Quality Bar và Golden Set
 
@@ -64,11 +76,20 @@ Artifact: `eval/run_results*.json`, `eval/run_results*.md` và `eval/run_logs*.j
 
 ## 6. Logging và bảo mật
 
-- Log gồm prompt, raw response, model review, guardrail signal, final parsed review, model, latency và request ID.
+- Với cache miss, log gồm prompt, raw response, model review, guardrail signal, final parsed review, model, latency và request ID.
+- Với cache hit, log có `from_cache: true`, model mang hậu tố `:cached`, latency và request ID; `prompt`, `raw_response` và `guardrail_signal` là `null` vì không gọi OpenAI.
 - Không log header Authorization hoặc API key; `.env` và runtime log cục bộ bị `.gitignore`.
 - `codebase/data/` là data pack bảo vệ và không được commit. Golden set chỉ lưu dữ liệu tối thiểu đã ẩn danh.
 
 ## 9. Changelog
+
+### 2026-09-17 — Thêm response cache và tối ưu độ trễ
+
+- **Cache có kiểm soát:** tra cứu theo checkpoint, lựa chọn và lời giải đã chuẩn hóa; cache hit bỏ qua lượt gọi OpenAI, còn cache miss chỉ được lưu khi vượt quality gate.
+- **Phạm vi đối sánh:** hỗ trợ khác biệt về chữ hoa/thường, dấu tiếng Việt và khoảng trắng; chưa hỗ trợ semantic matching cho các câu đồng nghĩa dùng từ khác nhau.
+- **Giám sát chất lượng:** seed từ Golden Set, theo dõi hit count, xếp hàng audit và hỗ trợ phản hồi đã được giảng viên xác thực hoặc ghi đè.
+- **Tối ưu model:** đặt `reasoning.effort` ở mức `low`; chưa xóa trường reasoning khỏi request.
+- **Logging:** phân biệt cache hit và cache miss; cache hit không có prompt hoặc raw OpenAI response.
 
 ### 2026-09-17 — Điều chỉnh checkpoint sau validation R6
 
