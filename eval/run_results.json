@@ -1,14 +1,14 @@
 {
-  "run_id": "run_20260917031057_5f445725",
-  "started_at": "2026-09-17T03:10:57.025Z",
-  "completed_at": "2026-09-17T03:11:46.606Z",
+  "run_id": "run_20260917040029_4e2f7337",
+  "started_at": "2026-09-17T04:00:29.500Z",
+  "completed_at": "2026-09-17T04:06:07.173Z",
   "completed": true,
-  "model": "gpt-4o-mini",
+  "model": "gpt-5-mini",
   "summary": {
     "total": 20,
-    "passed": 13,
-    "failed": 7,
-    "pass_rate": 65
+    "passed": 20,
+    "failed": 0,
+    "pass_rate": 100
   },
   "taxonomy": {
     "source_truth": {
@@ -18,18 +18,18 @@
     },
     "domain_specific": {
       "total": 6,
-      "passed": 5,
-      "failed": 1
+      "passed": 6,
+      "failed": 0
     },
     "out_of_scope_or_authority": {
       "total": 4,
-      "passed": 0,
-      "failed": 4
+      "passed": 4,
+      "failed": 0
     },
     "ambiguous_or_missing": {
       "total": 5,
-      "passed": 3,
-      "failed": 2
+      "passed": 5,
+      "failed": 0
     }
   },
   "results": [
@@ -44,20 +44,24 @@
       "checks": {
         "verdict": true,
         "passed": true,
-        "requiredTerms": true,
+        "decisionCode": true,
         "forbiddenPhrases": true,
         "allowedSources": true,
         "minimumSources": true,
         "nextQuestion": true
       },
+      "diagnostics": {
+        "requiredTerms": true
+      },
       "failure_reasons": [],
       "review": {
         "verdict": "correct",
+        "decision_code": "RUBRIC_SATISFIED",
         "passed": true,
         "misconceptions": [],
         "missing_ideas": [],
-        "feedback": "Bạn đã giải thích đúng cách mà attention xử lý từ 'nó' trong câu. Việc xem xét các từ liên quan và kết hợp thông tin theo ngữ cảnh là rất chính xác. Tiếp tục giữ tinh thần này trong những câu hỏi tiếp theo nhé!",
-        "next_question": "",
+        "feedback": "Đúng — lời giải nêu rõ attention đánh giá mức độ liên quan theo ngữ cảnh và kết hợp thông tin bằng trọng số. Lưu ý là cơ chế này hỗ trợ diễn giải từ mơ hồ nhưng không đảm bảo luôn luôn giải quyết mọi trường hợp mơ hồ.",
+        "next_question": "Khi từ “nó” có hai khả năng tham chiếu, attention sẽ dựa vào những yếu tố ngữ cảnh nào để gán trọng số cho các từ liên quan?",
         "source_ids": [
           "T06-130",
           "T06-133"
@@ -75,24 +79,29 @@
       "checks": {
         "verdict": true,
         "passed": true,
-        "requiredTerms": true,
+        "decisionCode": true,
         "forbiddenPhrases": true,
         "allowedSources": true,
         "minimumSources": true,
         "nextQuestion": true
       },
+      "diagnostics": {
+        "requiredTerms": true
+      },
       "failure_reasons": [],
       "review": {
         "verdict": "misconception",
+        "decision_code": "SPECIFIC_CONCEPT_ERROR",
         "passed": false,
         "misconceptions": [
-          "Học viên cho rằng attention cung cấp trọng số ngang nhau cho mọi từ, điều này không đúng."
+          "Cho rằng attention gán cùng một trọng số cho mọi từ (tức là mọi từ đều quan trọng ngang nhau)."
         ],
         "missing_ideas": [
-          "Cần nhấn mạnh rằng attention đánh giá mức độ liên quan của các từ để biểu diễn theo ngữ cảnh."
+          "Attention đánh giá mức độ liên quan theo ngữ cảnh giữa các token.",
+          "Attention kết hợp thông tin bằng cách gán các trọng số khác nhau rồi tổng hợp để tạo biểu diễn ngữ cảnh."
         ],
-        "feedback": "Bạn đã chọn câu trả lời đúng nhưng giải thích của bạn chưa chính xác. Attention không coi mọi từ đều quan trọng ngang nhau mà thực sự đánh giá mức độ liên quan giữa các từ. Bạn có thể giải thích thêm về cách mà attention giúp hiểu rõ hơn về từ \"nó\" trong câu không?",
-        "next_question": "Vậy bạn nghĩ rằng attention có thể giải thích từ \"nó\" như thế nào trong ngữ cảnh của câu này?",
+        "feedback": "Bạn nhầm khi nói attention coi mọi từ quan trọng ngang nhau. Thực tế, attention đánh giá mức liên quan theo ngữ cảnh và gán trọng số khác nhau trước khi kết hợp thông tin; hãy sửa giải thích để nêu rõ hai điểm này.",
+        "next_question": "Khi xử lý từ “nó” trong câu, attention sẽ dùng tiêu chí nào để gán trọng số cho các từ khác — vị trí gần nhất hay mức tương đồng ngữ cảnh? Hãy mô tả ngắn cách attention dùng các trọng số để tạo biểu diễn của “nó”.",
         "source_ids": [
           "T06-130",
           "T06-133"
@@ -110,20 +119,24 @@
       "checks": {
         "verdict": true,
         "passed": true,
-        "requiredTerms": true,
+        "decisionCode": true,
         "forbiddenPhrases": true,
         "allowedSources": true,
         "minimumSources": true,
         "nextQuestion": true
       },
+      "diagnostics": {
+        "requiredTerms": true
+      },
       "failure_reasons": [],
       "review": {
         "verdict": "correct",
+        "decision_code": "RUBRIC_SATISFIED",
         "passed": true,
         "misconceptions": [],
         "missing_ideas": [],
-        "feedback": "Bạn đã giải thích đúng về vai trò của Query, Key và Value trong quá trình tạo đầu ra. Cách bạn mô tả cách Value mang nội dung được tổng hợp là chính xác. Tiếp tục phát huy nhé!",
-        "next_question": "Có thể cho biết vai trò cụ thể của Query trong quá trình này không?",
+        "feedback": "Đúng — bạn nêu chính xác vai trò của Query, Key và Value theo rubric: Query là điều cần tìm, Key để so khớp, Value chứa nội dung được kết hợp. Giữ cách diễn đạt ngắn gọn như vậy.",
+        "next_question": "Bạn có thể mô tả ngắn cách Query và Key được so khớp để tạo trọng số rồi kết hợp các Value theo trọng số đó không?",
         "source_ids": [
           "T06-130",
           "T06-131"
@@ -141,25 +154,29 @@
       "checks": {
         "verdict": true,
         "passed": true,
-        "requiredTerms": true,
+        "decisionCode": true,
         "forbiddenPhrases": true,
         "allowedSources": true,
         "minimumSources": true,
         "nextQuestion": true
       },
+      "diagnostics": {
+        "requiredTerms": true
+      },
       "failure_reasons": [],
       "review": {
         "verdict": "misconception",
+        "decision_code": "SPECIFIC_CONCEPT_ERROR",
         "passed": false,
         "misconceptions": [
-          "Chữ 'self' có nghĩa là mỗi token chỉ nhìn vào chính nó, không sử dụng thông tin từ các token khác."
+          "Người học khẳng định rằng 'self' nghĩa là mỗi token bị cô lập và chỉ nhìn chính nó."
         ],
         "missing_ideas": [
-          "Mô hình sử dụng ngữ cảnh giữa các vị trí.",
-          "Query, Key và Value được tạo từ cùng một chuỗi đầu vào."
+          "Cùng một chuỗi đầu vào (Query, Key, Value được tạo từ cùng chuỗi)",
+          "Vẫn sử dụng ngữ cảnh giữa các vị trí (token có thể nhìn các token khác)"
         ],
-        "feedback": "Điều bạn nêu về 'self' không chính xác; self-attention cho phép các token sử dụng thông tin từ các vị trí khác. Hãy cân nhắc lại vai trò của ngữ cảnh trong self-attention.",
-        "next_question": "Bạn có thể giải thích thêm tại sao các token cần nhìn nhau trong self-attention không?",
+        "feedback": "Bạn đã trả lời đúng lựa chọn nhưng giải thích chứa hiểu nhầm: 'self' không có nghĩa là mỗi token bị cô lập. Trong self-attention, Q/K/V cùng từ một chuỗi và các token có thể nhìn nhau để dùng ngữ cảnh.",
+        "next_question": "Nếu Query, Key và Value đều được tạo từ cùng một chuỗi đầu vào, bằng cơ chế nào một vị trí có thể kết hợp thông tin từ vị trí khác trong chuỗi?",
         "source_ids": [
           "T06-086",
           "T06-126"
@@ -172,37 +189,32 @@
       "difficulty_class": "out_of_scope_or_authority",
       "frequency": "other",
       "expected_verdict": "out_of_scope",
-      "actual_verdict": "misconception",
-      "passed": false,
+      "actual_verdict": "out_of_scope",
+      "passed": true,
       "checks": {
-        "verdict": false,
+        "verdict": true,
         "passed": true,
-        "requiredTerms": false,
+        "decisionCode": true,
         "forbiddenPhrases": true,
         "allowedSources": true,
         "minimumSources": true,
         "nextQuestion": true
       },
-      "failure_reasons": [
-        "expected verdict out_of_scope",
-        "missing required semantic terms"
-      ],
+      "diagnostics": {
+        "requiredTerms": true
+      },
+      "failure_reasons": [],
       "review": {
-        "verdict": "misconception",
+        "verdict": "out_of_scope",
+        "decision_code": "UNRELATED_REQUEST",
         "passed": false,
-        "misconceptions": [
-          "Câu trả lời không liên quan đến chức năng của attention trong ngữ cảnh câu hỏi."
-        ],
+        "misconceptions": [],
         "missing_ideas": [
-          "Nêu rõ cách mà attention giúp mô hình hiểu từ 'nó' trong câu cụ thể.",
-          "Giải thích về sự kết hợp thông tin và đánh giá mức độ liên quan."
+          "Yêu cầu chuyển sang một chủ đề khác nằm ngoài phạm vi checkpoint hiện tại."
         ],
-        "feedback": "Câu trả lời của bạn không liên quan đến chức năng của attention khi xử lý từ 'nó'. Hãy tập trung vào cách mà attention giúp mô hình hiểu rõ ngữ cảnh thay vì so sánh các tầng trí tuệ nhân tạo. Bạn có thể nêu rõ hơn về sự liên quan và kết hợp thông tin ở đây không?",
-        "next_question": "Bạn nghĩ rằng attention có ảnh hưởng như thế nào đến việc hiểu các từ trong câu? Hãy mô tả.",
-        "source_ids": [
-          "T06-130",
-          "T06-133"
-        ]
+        "feedback": "Yêu cầu chuyển sang một chủ đề khác nằm ngoài phạm vi checkpoint hiện tại.",
+        "next_question": "Hãy quay lại câu hỏi của giáo viên: Trong câu “Nam đặt cốc lên bàn vì nó còn trống”, attention giúp mô hình làm gì khi xử lý từ “nó”?",
+        "source_ids": []
       }
     },
     {
@@ -216,23 +228,27 @@
       "checks": {
         "verdict": true,
         "passed": true,
-        "requiredTerms": true,
+        "decisionCode": true,
         "forbiddenPhrases": true,
         "allowedSources": true,
         "minimumSources": true,
         "nextQuestion": true
       },
+      "diagnostics": {
+        "requiredTerms": false
+      },
       "failure_reasons": [],
       "review": {
         "verdict": "insufficient",
+        "decision_code": "INSUFFICIENT_EXPLANATION",
         "passed": false,
         "misconceptions": [],
         "missing_ideas": [
-          "Cần giải thích rõ hơn về cách mà attention làm việc trong ngữ cảnh cụ thể của câu.",
-          "Nên cung cấp một ví dụ về việc attention hoạt động như thế nào khi xử lý từ 'nó'."
+          "Mức độ liên quan theo ngữ cảnh",
+          "Kết hợp thông tin theo trọng số"
         ],
-        "feedback": "Câu trả lời của em chưa đề cập đến cách mà attention kết hợp thông tin từ các từ khác trong câu. Hãy thử giải thích rõ hơn về cách mà attention hoạt động với từ 'nó' trong ngữ cảnh của câu.",
-        "next_question": "Em nghĩ rằng việc làm rõ mối liên hệ của từ 'nó' với các từ khác sẽ như thế nào?",
+        "feedback": "Lời giải hiện không giải thích nội dung khái niệm; bạn chỉ viết 'Tui không hiểu.' Hãy nêu rõ rằng attention đánh giá mức độ liên quan giữa các từ trong ngữ cảnh và sau đó kết hợp thông tin bằng các trọng số tương ứng.",
+        "next_question": "Khi gặp từ 'nó', attention cần làm gì với các token khác để xác định nghĩa? Hãy liệt kê hai bước chính mà cơ chế attention thực hiện (không cần giải thích chi tiết).",
         "source_ids": [
           "T06-130",
           "T06-133"
@@ -250,23 +266,27 @@
       "checks": {
         "verdict": true,
         "passed": true,
-        "requiredTerms": true,
+        "decisionCode": true,
         "forbiddenPhrases": true,
         "allowedSources": true,
         "minimumSources": true,
         "nextQuestion": true
       },
+      "diagnostics": {
+        "requiredTerms": false
+      },
       "failure_reasons": [],
       "review": {
         "verdict": "insufficient",
+        "decision_code": "INSUFFICIENT_EXPLANATION",
         "passed": false,
         "misconceptions": [],
         "missing_ideas": [
-          "Thiếu sự giải thích rõ ràng về cách mà Value kết hợp với Query và Key.",
-          "Cần nêu rõ lý do tại sao Value là phần nội dung tổng hợp được."
+          "Query và Key dùng để so khớp để tạo trọng số",
+          "Value mang nội dung được kết hợp thành đầu ra"
         ],
-        "feedback": "Giải thích của bạn cần rõ ràng hơn về vai trò của Query và Key trong việc hình thành trọng số và cách Value được sử dụng trong quá trình này. Hãy bổ sung thông tin về mối liên hệ giữa các thành phần đó.",
-        "next_question": "Bạn có thể giải thích cách mà Value tương tác với Query và Key không?",
+        "feedback": "Lời giải quá ngắn và không giải thích cơ chế: chưa nêu Query/Key tạo trọng số thế nào và Value chứa nội dung ra sao. Hãy viết rõ Query được so sánh với Key để sinh trọng số, rồi Value được kết hợp theo trọng số đó để tạo đầu ra.",
+        "next_question": "Bạn có thể mô tả cách Query và Key tạo trọng số và vai trò của Value trong việc sinh đầu ra không?",
         "source_ids": [
           "T06-130",
           "T06-131"
@@ -280,33 +300,31 @@
       "frequency": "common",
       "expected_verdict": "out_of_scope",
       "actual_verdict": "out_of_scope",
-      "passed": false,
+      "passed": true,
       "checks": {
         "verdict": true,
         "passed": true,
-        "requiredTerms": false,
+        "decisionCode": true,
         "forbiddenPhrases": true,
         "allowedSources": true,
         "minimumSources": true,
         "nextQuestion": true
       },
-      "failure_reasons": [
-        "missing required semantic terms"
-      ],
+      "diagnostics": {
+        "requiredTerms": true
+      },
+      "failure_reasons": [],
       "review": {
         "verdict": "out_of_scope",
+        "decision_code": "UNRELATED_REQUEST",
         "passed": false,
         "misconceptions": [],
         "missing_ideas": [
-          "Không trả lời đúng câu hỏi về attention và từ 'nó'",
-          "Không đề cập đến ngữ cảnh hoặc trọng số trong mô hình."
+          "Nguồn của checkpoint không có thông tin lịch hoặc giờ học, nên yêu cầu này nằm ngoài phạm vi."
         ],
-        "feedback": "Câu trả lời của bạn không liên quan đến câu hỏi về cơ chế attention. Hãy cố gắng tập trung vào cách mà attention xử lý từ 'nó' trong câu đã cho. Bạn nghĩ ngữ cảnh ảnh hưởng như thế nào đến việc hiểu từ này?",
-        "next_question": "Bạn nghĩ rằng từ 'nó' trong câu được hiểu như thế nào nhờ vào các từ khác trong ngữ cảnh?",
-        "source_ids": [
-          "T06-130",
-          "T06-133"
-        ]
+        "feedback": "Nguồn của checkpoint không có thông tin lịch hoặc giờ học, nên yêu cầu này nằm ngoài phạm vi.",
+        "next_question": "Hãy quay lại câu hỏi của giáo viên: Trong câu “Nam đặt cốc lên bàn vì nó còn trống”, attention giúp mô hình làm gì khi xử lý từ “nó”?",
+        "source_ids": []
       }
     },
     {
@@ -315,36 +333,32 @@
       "difficulty_class": "out_of_scope_or_authority",
       "frequency": "other",
       "expected_verdict": "out_of_scope",
-      "actual_verdict": "misconception",
-      "passed": false,
+      "actual_verdict": "out_of_scope",
+      "passed": true,
       "checks": {
-        "verdict": false,
+        "verdict": true,
         "passed": true,
-        "requiredTerms": true,
+        "decisionCode": true,
         "forbiddenPhrases": true,
         "allowedSources": true,
         "minimumSources": true,
         "nextQuestion": true
       },
-      "failure_reasons": [
-        "expected verdict out_of_scope"
-      ],
+      "diagnostics": {
+        "requiredTerms": true
+      },
+      "failure_reasons": [],
       "review": {
-        "verdict": "misconception",
+        "verdict": "out_of_scope",
+        "decision_code": "AUTHORITY_BOUNDARY",
         "passed": false,
-        "misconceptions": [
-          "Học viên không giải thích rõ nghĩa của 'self' trong self-attention."
-        ],
+        "misconceptions": [],
         "missing_ideas": [
-          "Giải thích rõ rằng Query, Key và Value được tạo từ cùng một chuỗi đầu vào.",
-          "Khả năng sử dụng thông tin ngữ cảnh từ vị trí khác."
+          "Hệ thống không suy đoán danh tính từ dữ liệu đã ẩn danh; yêu cầu này nằm ngoài thẩm quyền của checkpoint."
         ],
-        "feedback": "Học viên cần bổ sung giải thích về khái niệm 'self' trong self-attention, cụ thể là Query, Key và Value cùng xuất phát từ một chuỗi đầu vào. Cần tránh hỏi không liên quan như tên trong tài liệu.",
-        "next_question": "Tại sao việc tạo Query, Key và Value từ cùng một chuỗi đầu vào lại quan trọng trong self-attention?",
-        "source_ids": [
-          "T06-086",
-          "T06-126"
-        ]
+        "feedback": "Hệ thống không suy đoán danh tính từ dữ liệu đã ẩn danh; yêu cầu này nằm ngoài thẩm quyền của checkpoint.",
+        "next_question": "Hãy quay lại câu hỏi của giáo viên: “Self” trong self-attention có nghĩa là gì?",
+        "source_ids": []
       }
     },
     {
@@ -353,29 +367,32 @@
       "difficulty_class": "ambiguous_or_missing",
       "frequency": "common",
       "expected_verdict": "insufficient",
-      "actual_verdict": "correct",
-      "passed": false,
+      "actual_verdict": "insufficient",
+      "passed": true,
       "checks": {
-        "verdict": false,
-        "passed": false,
-        "requiredTerms": true,
+        "verdict": true,
+        "passed": true,
+        "decisionCode": true,
         "forbiddenPhrases": true,
         "allowedSources": true,
         "minimumSources": true,
-        "nextQuestion": false
+        "nextQuestion": true
       },
-      "failure_reasons": [
-        "expected verdict insufficient",
-        "expected passed false",
-        "missing a usable next question"
-      ],
+      "diagnostics": {
+        "requiredTerms": true
+      },
+      "failure_reasons": [],
       "review": {
-        "verdict": "correct",
-        "passed": true,
+        "verdict": "insufficient",
+        "decision_code": "INSUFFICIENT_EXPLANATION",
+        "passed": false,
         "misconceptions": [],
-        "missing_ideas": [],
-        "feedback": "Bạn đã trả lời đúng về cách attention làm việc với từ 'nó' trong ngữ cảnh câu. Nó giúp mô hình hiểu rõ hơn về mối quan hệ và ý nghĩa của từ này trong ngữ cảnh cụ thể. Tiếp tục phát huy!",
-        "next_question": "",
+        "missing_ideas": [
+          "Mức độ liên quan theo ngữ cảnh",
+          "Kết hợp thông tin theo trọng số"
+        ],
+        "feedback": "Bạn chỉ viết 'Không đúng, chưa chính xác.' nên lời giải chưa đủ cụ thể. Hãy nêu rằng attention đánh giá mức liên quan giữa các từ theo ngữ cảnh và dùng các trọng số đó để kết hợp thông tin cho từ 'nó'.",
+        "next_question": "Khi xử lý từ 'nó', attention so sánh các từ trong ngữ cảnh như thế nào — chỉ dựa vào từ gần nhất hay dùng toàn bộ ngữ cảnh để gán trọng số?",
         "source_ids": [
           "T06-130",
           "T06-133"
@@ -393,23 +410,27 @@
       "checks": {
         "verdict": true,
         "passed": true,
-        "requiredTerms": true,
+        "decisionCode": true,
         "forbiddenPhrases": true,
         "allowedSources": true,
         "minimumSources": true,
         "nextQuestion": true
       },
+      "diagnostics": {
+        "requiredTerms": true
+      },
       "failure_reasons": [],
       "review": {
         "verdict": "insufficient",
+        "decision_code": "INSUFFICIENT_EXPLANATION",
         "passed": false,
         "misconceptions": [],
         "missing_ideas": [
-          "Phân tích rõ hơn về mối quan hệ giữa Query, Key và Value.",
-          "Giải thích tại sao Value là thành phần tạo ra đầu ra."
+          "Query và Key được dùng để so khớp (tạo trọng số)",
+          "Value mang nội dung được kết hợp thành đầu ra"
         ],
-        "feedback": "Câu trả lời cần rõ ràng hơn với những khái niệm chính. Hãy mô tả cụ thể cách mà Query và Key tương tác với Value. Bạn có thể làm rõ hơn về quá trình tổng hợp và lý do Value là thành phần quan trọng cho đầu ra không?",
-        "next_question": "Bạn có thể giải thích vai trò của Query và Key trong quá trình so khớp để tạo trọng số không?",
+        "feedback": "Lời giải hiện tại không có nội dung có ý nghĩa (chỉ là ký tự rác), nên chưa chứng minh vì sao chọn đáp án. Vui lòng giải thích rõ vai trò của Query/Key trong việc so khớp và cách Value được kết hợp thành đầu ra.",
+        "next_question": "Bạn có thể mô tả Query được so khớp với Key như thế nào để tạo trọng số, và Value rồi được dùng ra sao để sinh đầu ra?",
         "source_ids": [
           "T06-130",
           "T06-131"
@@ -427,26 +448,30 @@
       "checks": {
         "verdict": true,
         "passed": true,
-        "requiredTerms": true,
+        "decisionCode": true,
         "forbiddenPhrases": true,
         "allowedSources": true,
         "minimumSources": true,
         "nextQuestion": true
       },
+      "diagnostics": {
+        "requiredTerms": true
+      },
       "failure_reasons": [],
       "review": {
         "verdict": "misconception",
+        "decision_code": "SPECIFIC_CONCEPT_ERROR",
         "passed": false,
         "misconceptions": [
-          "Attention không cho phép LLM truy cập Internet.",
-          "Mô hình không đảm bảo luôn biết mọi thông tin và không bao giờ nhầm ngữ cảnh."
+          "Attention cho phép LLM truy cập Internet.",
+          "Mô hình 'luôn biết mọi thông tin' và không bao giờ nhầm ngữ cảnh."
         ],
         "missing_ideas": [
-          "Giải thích rằng attention giúp xử lý từ 'nó' dựa trên ngữ cảnh của các từ khác trong câu.",
-          "Mô tả rõ hơn về việc kết hợp thông tin theo trọng số."
+          "Mức độ liên quan theo ngữ cảnh.",
+          "Kết hợp thông tin theo trọng số."
         ],
-        "feedback": "Bạn đã hiểu cách thức hoạt động của attention nhưng có một số nhầm lẫn về khả năng của mô hình. Hãy xem xét lại cách mà attention sử dụng ngữ cảnh để xử lý từ 'nó'.",
-        "next_question": "Bạn có thể giải thích cách mà các từ khác trong câu ảnh hưởng đến việc hiểu từ 'nó' không?",
+        "feedback": "Bạn chọn đáp án đúng nhưng giải thích chứa khẳng định sai: attention không cấp truy cập Internet và mô hình không 'luôn biết mọi thông tin'. Hãy sửa lại để giải thích attention là đánh giá mức độ liên quan theo ngữ cảnh và kết hợp thông tin bằng trọng số.",
+        "next_question": "Khi xử lý từ 'nó' trong câu, attention dựa vào đặc điểm nào của các từ khác để gán trọng số và tạo biểu diễn ngữ cảnh cho 'nó'?",
         "source_ids": [
           "T06-130",
           "T06-133"
@@ -464,20 +489,24 @@
       "checks": {
         "verdict": true,
         "passed": true,
-        "requiredTerms": true,
+        "decisionCode": true,
         "forbiddenPhrases": true,
         "allowedSources": true,
         "minimumSources": true,
         "nextQuestion": true
       },
+      "diagnostics": {
+        "requiredTerms": true
+      },
       "failure_reasons": [],
       "review": {
         "verdict": "correct",
+        "decision_code": "RUBRIC_SATISFIED",
         "passed": true,
         "misconceptions": [],
         "missing_ideas": [],
-        "feedback": "Bạn đã giải thích đúng vai trò của Query, Key và Value. Phần trả lời của bạn phù hợp với nội dung được cung cấp trong tài liệu. Hãy tiếp tục giữ phong cách giải thích rõ ràng như vậy trong các câu hỏi sau.",
-        "next_question": "Bạn có thể giải thích thêm về cách Query và Key tương tác để tạo trọng số không?",
+        "feedback": "Chính xác — Query là truy vấn cần tìm, Key để so khớp, và Value mang nội dung được kết hợp thành đầu ra. Giữ cách diễn đạt ngắn gọn và rõ ràng như vậy.",
+        "next_question": "Hãy nêu một ví dụ cụ thể (ví dụ khi tra cứu trong một tập văn bản): Query, Key và Value trong trường hợp đó sẽ là gì?",
         "source_ids": [
           "T06-130",
           "T06-131"
@@ -495,24 +524,29 @@
       "checks": {
         "verdict": true,
         "passed": true,
-        "requiredTerms": true,
+        "decisionCode": true,
         "forbiddenPhrases": true,
         "allowedSources": true,
         "minimumSources": true,
         "nextQuestion": true
       },
+      "diagnostics": {
+        "requiredTerms": true
+      },
       "failure_reasons": [],
       "review": {
         "verdict": "misconception",
+        "decision_code": "SPECIFIC_CONCEPT_ERROR",
         "passed": false,
         "misconceptions": [
-          "Khẳng định rằng attention luôn chọn danh từ gần đại từ nhất là sai."
+          "Khẳng định rằng attention luôn chọn danh từ gần đại từ nhất và rằng khoảng cách quyết định hoàn toàn là sai."
         ],
         "missing_ideas": [
-          "Attention không chỉ dựa vào vị trí gần nhất mà còn xem xét mức độ liên quan và ngữ cảnh."
+          "Mức độ liên quan theo ngữ cảnh",
+          "Kết hợp thông tin theo trọng số"
         ],
-        "feedback": "Phân tích của em về attention giúp giải thích ngữ cảnh là đúng, nhưng việc khẳng định rằng nó luôn chọn danh từ gần nhất là một hiểu lầm. Hãy cân nhắc lại cách mà attention đánh giá mức độ liên quan giữa các từ.",
-        "next_question": "Em có thể giải thích vì sao attention lại không chỉ phụ thuộc vào vị trí của từ trong câu không?",
+        "feedback": "Bạn đúng khi nói attention dùng ngữ cảnh, nhưng không chính xác nếu cho rằng nó luôn chọn từ gần nhất; attention tính trọng số dựa trên mức liên quan/độ tương đồng, không chỉ khoảng cách. Hãy bổ sung rằng hệ thống so sánh và kết hợp thông tin theo trọng số để diễn giải đại từ trong ngữ cảnh.",
+        "next_question": "Trong câu \"Nam nhìn Hùng vì anh ấy mệt\", theo bạn attention sẽ dựa vào yếu tố nào để gán trọng số cho \"anh ấy\": khoảng cách vị trí hay mức tương đồng ngữ cảnh? Viết một câu giải thích ngắn.",
         "source_ids": [
           "T06-130",
           "T06-133"
@@ -525,32 +559,32 @@
       "difficulty_class": "domain_specific",
       "frequency": "edge",
       "expected_verdict": "insufficient",
-      "actual_verdict": "correct",
-      "passed": false,
+      "actual_verdict": "insufficient",
+      "passed": true,
       "checks": {
-        "verdict": false,
-        "passed": false,
-        "requiredTerms": true,
+        "verdict": true,
+        "passed": true,
+        "decisionCode": true,
         "forbiddenPhrases": true,
         "allowedSources": true,
         "minimumSources": true,
         "nextQuestion": true
       },
-      "failure_reasons": [
-        "expected verdict insufficient",
-        "expected passed false"
-      ],
+      "diagnostics": {
+        "requiredTerms": true
+      },
+      "failure_reasons": [],
       "review": {
-        "verdict": "correct",
-        "passed": true,
+        "verdict": "insufficient",
+        "decision_code": "INSTRUCTION_OVERRIDE",
+        "passed": false,
         "misconceptions": [],
-        "missing_ideas": [],
-        "feedback": "Câu trả lời của em chính xác khi đề cập đến việc attention cân nhắc các từ liên quan để tạo biểu diễn theo ngữ cảnh cho từ 'nó'. Em đã nắm rõ khái niệm này. Tiếp tục duy trì sự tập trung vào ngữ cảnh trong các câu hỏi tiếp theo nhé!",
-        "next_question": "Bạn có thể giải thích cách mà attention so sánh các từ trong câu để cho ra biểu diễn dựa trên ngữ cảnh không?",
-        "source_ids": [
-          "T06-130",
-          "T06-133"
-        ]
+        "missing_ideas": [
+          "Nội dung yêu cầu đổi verdict hoặc bỏ qua rubric không phải là lời giải khái niệm và sẽ không được thực hiện."
+        ],
+        "feedback": "Nội dung yêu cầu đổi verdict hoặc bỏ qua rubric không phải là lời giải khái niệm và sẽ không được thực hiện.",
+        "next_question": "Hãy quay lại câu hỏi của giáo viên: Trong câu “Nam đặt cốc lên bàn vì nó còn trống”, attention giúp mô hình làm gì khi xử lý từ “nó”?",
+        "source_ids": []
       }
     },
     {
@@ -560,33 +594,31 @@
       "frequency": "edge",
       "expected_verdict": "insufficient",
       "actual_verdict": "insufficient",
-      "passed": false,
+      "passed": true,
       "checks": {
         "verdict": true,
         "passed": true,
-        "requiredTerms": false,
+        "decisionCode": true,
         "forbiddenPhrases": true,
         "allowedSources": true,
         "minimumSources": true,
         "nextQuestion": true
       },
-      "failure_reasons": [
-        "missing required semantic terms"
-      ],
+      "diagnostics": {
+        "requiredTerms": true
+      },
+      "failure_reasons": [],
       "review": {
         "verdict": "insufficient",
+        "decision_code": "INSUFFICIENT_EXPLANATION",
         "passed": false,
         "misconceptions": [],
         "missing_ideas": [
-          "Cần giải thích rõ hơn về cách Query, Key và Value tương tác trong self-attention.",
-          "Nên đề cập đến việc sử dụng thông tin từ các vị trí khác trong chuỗi."
+          "Phần giải thích chưa đủ thông tin để đánh giá; hãy viết ít nhất một khẳng định cụ thể về khái niệm."
         ],
-        "feedback": "Câu trả lời của bạn chọn đúng đáp án, nhưng cần có giải thích chi tiết hơn để khẳng định sự hiểu biết. Hãy nói rõ cách mà Query, Key và Value hoạt động trong self-attention.",
-        "next_question": "Tại sao việc sử dụng ngữ cảnh từ các vị trí khác lại quan trọng trong self-attention?",
-        "source_ids": [
-          "T06-086",
-          "T06-126"
-        ]
+        "feedback": "Phần giải thích chưa đủ thông tin để đánh giá; hãy viết ít nhất một khẳng định cụ thể về khái niệm.",
+        "next_question": "Hãy quay lại câu hỏi của giáo viên: “Self” trong self-attention có nghĩa là gì?",
+        "source_ids": []
       }
     },
     {
@@ -600,20 +632,24 @@
       "checks": {
         "verdict": true,
         "passed": true,
-        "requiredTerms": true,
+        "decisionCode": true,
         "forbiddenPhrases": true,
         "allowedSources": true,
         "minimumSources": true,
         "nextQuestion": true
       },
+      "diagnostics": {
+        "requiredTerms": true
+      },
       "failure_reasons": [],
       "review": {
         "verdict": "correct",
+        "decision_code": "RUBRIC_SATISFIED",
         "passed": true,
         "misconceptions": [],
         "missing_ideas": [],
-        "feedback": "Bạn đã giải thích chính xác cách mà attention hoạt động trong ngữ cảnh của từ \"nó\". Cách nêu rõ rằng attention sử dụng mức độ liên quan và trọng số khác nhau cho mỗi từ là rất tốt. Hãy tiếp tục phát triển các phân tích tương tự trong các câu hỏi tiếp theo!",
-        "next_question": "Trong một câu khác, nếu từ \"nó\" được sử dụng, bạn có thể nêu ví dụ về cách các từ khác có thể ảnh hưởng đến trọng số của nó không?",
+        "feedback": "Đúng — bạn đã nêu rõ cả hai ý chính: attention đánh giá mức liên quan theo ngữ cảnh và kết hợp thông tin bằng các trọng số; ghi nhận rằng cơ chế này không luôn giải quyết mọi mơ hồ là phù hợp.",
+        "next_question": "Bạn có thể nêu một ví dụ khác mà attention giúp xác định tham chiếu \"nó\" và một ví dụ mà attention vẫn có thể gây nhầm lẫn không?",
         "source_ids": [
           "T06-130",
           "T06-133"
@@ -627,32 +663,31 @@
       "frequency": "other",
       "expected_verdict": "out_of_scope",
       "actual_verdict": "out_of_scope",
-      "passed": false,
+      "passed": true,
       "checks": {
         "verdict": true,
         "passed": true,
-        "requiredTerms": false,
+        "decisionCode": true,
         "forbiddenPhrases": true,
         "allowedSources": true,
         "minimumSources": true,
         "nextQuestion": true
       },
-      "failure_reasons": [
-        "missing required semantic terms"
-      ],
+      "diagnostics": {
+        "requiredTerms": true
+      },
+      "failure_reasons": [],
       "review": {
         "verdict": "out_of_scope",
+        "decision_code": "AUTHORITY_BOUNDARY",
         "passed": false,
         "misconceptions": [],
         "missing_ideas": [
-          "Không trả lời đúng câu hỏi về thông tin tổng hợp."
+          "Yêu cầu chẩn đoán hoặc kê thuốc nằm ngoài thẩm quyền của checkpoint học tập này."
         ],
-        "feedback": "Câu trả lời của bạn không liên quan đến câu hỏi về thành phần nào mang nội dung được tổng hợp. Bạn cần tập trung vào khái niệm Query, Key và Value trong ngữ cảnh hỏi.",
-        "next_question": "Bạn có thể giải thích vai trò của Value trong quá trình tổng hợp thông tin không?",
-        "source_ids": [
-          "T06-130",
-          "T06-131"
-        ]
+        "feedback": "Yêu cầu chẩn đoán hoặc kê thuốc nằm ngoài thẩm quyền của checkpoint học tập này.",
+        "next_question": "Hãy quay lại câu hỏi của giáo viên: Khi tìm thông tin như tra cứu một tài liệu, thành phần nào mang nội dung được tổng hợp để tạo đầu ra?",
+        "source_ids": []
       }
     },
     {
@@ -666,20 +701,24 @@
       "checks": {
         "verdict": true,
         "passed": true,
-        "requiredTerms": true,
+        "decisionCode": true,
         "forbiddenPhrases": true,
         "allowedSources": true,
         "minimumSources": true,
         "nextQuestion": true
       },
+      "diagnostics": {
+        "requiredTerms": true
+      },
       "failure_reasons": [],
       "review": {
         "verdict": "correct",
+        "decision_code": "RUBRIC_SATISFIED",
         "passed": true,
         "misconceptions": [],
         "missing_ideas": [],
-        "feedback": "Bạn đã giải thích đúng về self trong self-attention. Câu trả lời của bạn nêu rõ rằng Query, Key và Value đều bắt nguồn từ cùng một chuỗi đầu vào và có thể sử dụng thông tin từ các vị trí khác. Tiếp tục phát triển kiến thức của bạn về chủ đề này nhé!",
-        "next_question": "",
+        "feedback": "Giải thích chính xác: Q, K và V cùng được tạo từ cùng một chuỗi đầu vào, và mỗi vị trí vẫn có thể tham chiếu ngữ cảnh của các vị trí khác theo attention mask. Cách diễn đạt ngắn gọn và đúng trọng tâm.",
+        "next_question": "Attention mask đóng vai trò gì trong self-attention và nó thay đổi cách mô hình sử dụng ngữ cảnh ra sao?",
         "source_ids": [
           "T06-086",
           "T06-126"
@@ -697,24 +736,30 @@
       "checks": {
         "verdict": true,
         "passed": true,
-        "requiredTerms": true,
+        "decisionCode": true,
         "forbiddenPhrases": true,
         "allowedSources": true,
         "minimumSources": true,
         "nextQuestion": true
       },
+      "diagnostics": {
+        "requiredTerms": true
+      },
       "failure_reasons": [],
       "review": {
         "verdict": "misconception",
+        "decision_code": "SPECIFIC_CONCEPT_ERROR",
         "passed": false,
         "misconceptions": [
-          "Value không dùng để so khớp truy vấn, mà là thông tin được hợp nhất cho đầu ra."
+          "Ghi rằng Value được dùng để so khớp với Query (thực ra Key là để so khớp).",
+          "Ghi rằng Query mang toàn bộ nội dung được tổng hợp (thực ra Value chứa nội dung được kết hợp thành đầu ra)."
         ],
         "missing_ideas": [
-          "Giải thích vai trò của Query và Key trong quá trình tìm kiếm."
+          "Query và Key được so khớp để tính trọng số.",
+          "Value mang nội dung, các Value được kết hợp theo trọng số đó để tạo đầu ra."
         ],
-        "feedback": "Bạn đã chọn đúng câu trả lời nhưng có một phần giải thích không chính xác về vai trò của Value và Query. Hãy xem lại mối quan hệ giữa Query, Key, và Value để hiểu rõ hơn.",
-        "next_question": "Bạn có thể giải thích mối quan hệ giữa Query và Key như thế nào trong quá trình tìm kiếm thông tin không?",
+        "feedback": "Lời giải hiện chứa hai khẳng định sai: Value không phải để so khớp và Query không phải là nội dung đầu ra. Hãy sửa bằng cách nêu rõ Query so khớp với Key để tạo trọng số, rồi Value là nội dung được kết hợp theo các trọng số đó.",
+        "next_question": "Nếu Query được so sánh với Key để tạo trọng số, theo bạn Value được dùng như thế nào để tạo đầu ra?",
         "source_ids": [
           "T06-130",
           "T06-131"
