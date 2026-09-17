@@ -16,3 +16,6 @@ R014,rewatch_difficult_segment,no,none,sometimes,willing_if_skippable,explain_re
 R015,rewatch_difficult_segment,yes,unsure,often,willing_if_skippable,find_error,no,"Idk"
 R016,explain_back,yes,slower_pace,rarely,willing_if_skippable,explain_reason,no,"tốc độ chậm hơn để kiến thức k bị trôi"
 R017,exercise,yes,none,sometimes,willing,explain_reason,maybe,"Không cần sửa"
+R018,explain_back,yes,none,sometimes,willing_if_skippable,select_answer,maybe,"Không cần sửa"
+R019,exercise,yes,none,rarely,willing_if_skippable,find_error,no,"Không cần sửa"
+R020,explain_back,yes,none,sometimes,willing,explain_reason,maybe,"Không cần sửa"

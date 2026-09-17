@@ -70,6 +70,7 @@ export async function executeEvaluation({
         actual_verdict: review.verdict,
         passed: score.passed,
         checks: score.checks,
+        diagnostics: score.diagnostics,
         failure_reasons: score.failureReasons,
         review,
       });
@@ -112,9 +113,20 @@ export async function executeEvaluation({
   };
 }
 
-export function generateMarkdown(run) {
+function artifactNames(runNumber = 1) {
+  if (!Number.isInteger(runNumber) || runNumber < 1) throw new RangeError('Số lượt chạy phải là số nguyên dương.');
+  const suffix = runNumber === 1 ? '' : `_${runNumber}`;
+  return {
+    json: `run_results${suffix}.json`,
+    markdown: `run_results${suffix}.md`,
+    log: `run_logs${suffix}.jsonl`,
+  };
+}
+
+export function generateMarkdown(run, { runNumber = 1 } = {}) {
+  const names = artifactNames(runNumber);
   const lines = [
-    '# CP3 · Kết quả kiểm thử lượt 1',
+    `# CP3 · Kết quả kiểm thử lượt ${runNumber}`,
     '',
     `- Run ID: \`${run.run_id}\``,
     `- Thời điểm hoàn tất: ${run.completed_at}`,
@@ -150,19 +162,20 @@ export function generateMarkdown(run) {
       lines.push('');
     }
   }
-  lines.push('## Ghi chú trung thực', '', 'Tỷ lệ trên được tính trực tiếp từ `run_results.json`. Lỗi API, lỗi định dạng và thiếu log đều được tính là không đạt; không có ca nào được sửa kết quả thủ công.');
+  lines.push('## Ghi chú trung thực', '', `Tỷ lệ trên được tính trực tiếp từ \`${names.json}\`. Lỗi API, lỗi định dạng và thiếu log đều được tính là không đạt; không có ca nào được sửa kết quả thủ công.`);
   return `${lines.join('\n')}\n`;
 }
 
-export async function writeRunArtifacts(run, outputDirectory = evalDirectory) {
+export async function writeRunArtifacts(run, outputDirectory = evalDirectory, { runNumber = 1 } = {}) {
   if (!run.completed || run.results.length !== run.summary.total) throw new Error('Không được ghi report cho lượt chạy chưa hoàn tất.');
   await mkdir(outputDirectory, { recursive: true });
-  const jsonFinal = path.join(outputDirectory, 'run_results.json');
-  const markdownFinal = path.join(outputDirectory, 'run_results.md');
+  const names = artifactNames(runNumber);
+  const jsonFinal = path.join(outputDirectory, names.json);
+  const markdownFinal = path.join(outputDirectory, names.markdown);
   const jsonTemp = `${jsonFinal}.tmp`;
   const markdownTemp = `${markdownFinal}.tmp`;
   await writeFile(jsonTemp, `${JSON.stringify(run, null, 2)}\n`, 'utf8');
-  await writeFile(markdownTemp, generateMarkdown(run), 'utf8');
+  await writeFile(markdownTemp, generateMarkdown(run, { runNumber }), 'utf8');
   await rm(jsonFinal, { force: true });
   await rm(markdownFinal, { force: true });
   await rename(jsonTemp, jsonFinal);
@@ -187,8 +200,12 @@ async function main() {
   const cases = JSON.parse(await readFile(path.join(evalDirectory, 'golden_set.json'), 'utf8'));
   validateGoldenSet(cases);
 
-  const tempLogPath = path.join(evalDirectory, 'run_logs.jsonl.tmp');
-  const finalLogPath = path.join(evalDirectory, 'run_logs.jsonl');
+  const runNumberFlag = process.argv.find((argument) => argument.startsWith('--run-number='));
+  const runNumber = runNumberFlag ? Number(runNumberFlag.split('=', 2)[1]) : 1;
+  const names = artifactNames(runNumber);
+
+  const tempLogPath = path.join(evalDirectory, `${names.log}.tmp`);
+  const finalLogPath = path.join(evalDirectory, names.log);
   await rm(tempLogPath, { force: true });
   const reviewer = createOpenAIReviewer({ apiKey, model, logPath: tempLogPath });
   const run = await executeEvaluation({
@@ -202,7 +219,7 @@ async function main() {
   const logText = await readFile(tempLogPath, 'utf8');
   const logCount = logText.split(/\r?\n/).filter(Boolean).length;
   if (logCount !== cases.length) throw new Error(`Số log (${logCount}) không khớp số ca (${cases.length}).`);
-  await writeRunArtifacts(run, evalDirectory);
+  await writeRunArtifacts(run, evalDirectory, { runNumber });
   await rm(finalLogPath, { force: true });
   await rename(tempLogPath, finalLogPath);
   console.log(`Hoàn tất: ${run.summary.passed}/${run.summary.total} ca đạt (${run.summary.pass_rate.toFixed(1)}%).`);

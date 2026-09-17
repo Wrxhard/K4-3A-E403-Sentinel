@@ -25,6 +25,7 @@ function caseFixture(index) {
     acceptance: {
       expected_verdict: 'correct',
       expected_passed: true,
+      expected_decision_codes: ['RUBRIC_SATISFIED'],
       required_terms_any: [['ngữ cảnh', 'liên quan']],
       forbidden_phrases: ['hoàn toàn sai'],
       allowed_source_ids: ['T06-130', 'T06-133'],
@@ -85,10 +86,17 @@ test('rejects a case without explicit acceptance criteria', () => {
   assert.throws(() => validateGoldenSet(cases), /expected_verdict/);
 });
 
+test('rejects a case without expected structured decision codes', () => {
+  const cases = validCases();
+  delete cases[0].acceptance.expected_decision_codes;
+  assert.throws(() => validateGoldenSet(cases), /decision code/i);
+});
+
 test('scores a result only when every deterministic acceptance check passes', () => {
   const definition = caseFixture(0);
   const result = scoreCase(definition, {
     verdict: 'correct',
+    decision_code: 'RUBRIC_SATISFIED',
     passed: true,
     misconceptions: [],
     missing_ideas: [],
@@ -104,9 +112,11 @@ test('reports verdict, source, semantic, and follow-up failures independently', 
   const definition = caseFixture(0);
   definition.acceptance.expected_verdict = 'misconception';
   definition.acceptance.expected_passed = false;
+  definition.acceptance.expected_decision_codes = ['SPECIFIC_CONCEPT_ERROR'];
   definition.acceptance.require_next_question = true;
   const result = scoreCase(definition, {
     verdict: 'insufficient',
+    decision_code: 'INSUFFICIENT_EXPLANATION',
     passed: false,
     misconceptions: [],
     missing_ideas: [],
@@ -117,7 +127,66 @@ test('reports verdict, source, semantic, and follow-up failures independently', 
   assert.equal(result.passed, false);
   assert.equal(result.checks.verdict, false);
   assert.equal(result.checks.allowedSources, false);
-  assert.equal(result.checks.requiredTerms, false);
+  assert.equal(result.diagnostics.requiredTerms, false);
   assert.equal(result.checks.nextQuestion, false);
   assert.equal(result.failureReasons.length, 4);
+});
+
+test('accepts an explicit out-of-scope synonym instead of requiring one exact phrase', () => {
+  const definition = caseFixture(0);
+  definition.acceptance.expected_verdict = 'out_of_scope';
+  definition.acceptance.expected_passed = false;
+  definition.acceptance.expected_decision_codes = ['UNRELATED_REQUEST'];
+  definition.acceptance.required_terms_any = [['ngoài', 'không thuộc', 'checkpoint']];
+  definition.acceptance.minimum_source_ids = 0;
+  definition.acceptance.require_next_question = true;
+
+  const result = scoreCase(definition, {
+    verdict: 'out_of_scope',
+    decision_code: 'UNRELATED_REQUEST',
+    passed: false,
+    misconceptions: [],
+    missing_ideas: [],
+    feedback: 'Yêu cầu này không nằm trong phạm vi câu hỏi hiện tại.',
+    next_question: 'Bạn có thể quay lại giải thích attention không?',
+    source_ids: [],
+  });
+
+  assert.equal(result.passed, true);
+});
+
+test('uses the structured decision code instead of requiring feedback to repeat rubric terms', () => {
+  const definition = caseFixture(0);
+  const result = scoreCase(definition, {
+    verdict: 'correct',
+    decision_code: 'RUBRIC_SATISFIED',
+    passed: true,
+    misconceptions: [],
+    missing_ideas: [],
+    feedback: 'Giải thích của bạn chính xác.',
+    next_question: '',
+    source_ids: ['T06-130'],
+  });
+
+  assert.equal(result.passed, true);
+  assert.equal(result.checks.decisionCode, true);
+  assert.equal(result.diagnostics.requiredTerms, false);
+});
+
+test('fails a case when the structured decision code is not accepted', () => {
+  const definition = caseFixture(0);
+  const result = scoreCase(definition, {
+    verdict: 'correct',
+    decision_code: 'UNRELATED_REQUEST',
+    passed: true,
+    misconceptions: [],
+    missing_ideas: [],
+    feedback: 'Đúng.',
+    next_question: '',
+    source_ids: ['T06-130'],
+  });
+
+  assert.equal(result.passed, false);
+  assert.equal(result.checks.decisionCode, false);
+  assert.match(result.failureReasons.join(' '), /decision code/i);
 });

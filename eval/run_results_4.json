@@ -1,7 +1,7 @@
 {
-  "run_id": "run_20260917040029_4e2f7337",
-  "started_at": "2026-09-17T04:00:29.500Z",
-  "completed_at": "2026-09-17T04:06:07.173Z",
+  "run_id": "run_20260917033920_01b088c0",
+  "started_at": "2026-09-17T03:39:20.004Z",
+  "completed_at": "2026-09-17T03:43:53.268Z",
   "completed": true,
   "model": "gpt-5-mini",
   "summary": {
@@ -60,8 +60,8 @@
         "passed": true,
         "misconceptions": [],
         "missing_ideas": [],
-        "feedback": "Đúng — lời giải nêu rõ attention đánh giá mức độ liên quan theo ngữ cảnh và kết hợp thông tin bằng trọng số. Lưu ý là cơ chế này hỗ trợ diễn giải từ mơ hồ nhưng không đảm bảo luôn luôn giải quyết mọi trường hợp mơ hồ.",
-        "next_question": "Khi từ “nó” có hai khả năng tham chiếu, attention sẽ dựa vào những yếu tố ngữ cảnh nào để gán trọng số cho các từ liên quan?",
+        "feedback": "Đúng — bạn nêu cả hai ý chính trong rubric: attention đánh giá mức độ liên quan theo ngữ cảnh và kết hợp thông tin bằng trọng số. Lời giải ngắn gọn và chính xác.",
+        "next_question": "Cho một câu khác có đại từ mơ hồ (ví dụ: “Lan nói với Hoa rằng nó đã hỏng”). Những từ nào trong câu này attention cần cân nhắc để giúp xác định tham chiếu của “nó” và tại sao?",
         "source_ids": [
           "T06-130",
           "T06-133"
@@ -94,14 +94,14 @@
         "decision_code": "SPECIFIC_CONCEPT_ERROR",
         "passed": false,
         "misconceptions": [
-          "Cho rằng attention gán cùng một trọng số cho mọi từ (tức là mọi từ đều quan trọng ngang nhau)."
+          "Khẳng định rằng attention coi mọi từ quan trọng ngang nhau và gán cùng một trọng số cho tất cả token."
         ],
         "missing_ideas": [
-          "Attention đánh giá mức độ liên quan theo ngữ cảnh giữa các token.",
-          "Attention kết hợp thông tin bằng cách gán các trọng số khác nhau rồi tổng hợp để tạo biểu diễn ngữ cảnh."
+          "Attention đánh giá mức độ liên quan giữa các token theo ngữ cảnh (không phải trọng số bằng nhau).",
+          "Attention kết hợp thông tin bằng cách gán trọng số lớn hơn cho các từ liên quan hơn khi tạo biểu diễn ngữ cảnh."
         ],
-        "feedback": "Bạn nhầm khi nói attention coi mọi từ quan trọng ngang nhau. Thực tế, attention đánh giá mức liên quan theo ngữ cảnh và gán trọng số khác nhau trước khi kết hợp thông tin; hãy sửa giải thích để nêu rõ hai điểm này.",
-        "next_question": "Khi xử lý từ “nó” trong câu, attention sẽ dùng tiêu chí nào để gán trọng số cho các từ khác — vị trí gần nhất hay mức tương đồng ngữ cảnh? Hãy mô tả ngắn cách attention dùng các trọng số để tạo biểu diễn của “nó”.",
+        "feedback": "Bạn đã chọn đáp án đúng nhưng giải thích trái ngược với tài liệu: attention không gán cùng trọng số cho mọi từ. Hãy nêu rằng attention đánh giá mức độ liên quan theo ngữ cảnh và kết hợp thông tin bằng các trọng số khác nhau.",
+        "next_question": "Trong câu mẫu, theo bạn token nào (ví dụ 'cốc' hay 'bàn') nên có trọng số cao hơn khi diễn giải 'nó'? Giải thích ngắn dựa trên ý nghĩa ngữ cảnh.",
         "source_ids": [
           "T06-130",
           "T06-133"
@@ -135,8 +135,8 @@
         "passed": true,
         "misconceptions": [],
         "missing_ideas": [],
-        "feedback": "Đúng — bạn nêu chính xác vai trò của Query, Key và Value theo rubric: Query là điều cần tìm, Key để so khớp, Value chứa nội dung được kết hợp. Giữ cách diễn đạt ngắn gọn như vậy.",
-        "next_question": "Bạn có thể mô tả ngắn cách Query và Key được so khớp để tạo trọng số rồi kết hợp các Value theo trọng số đó không?",
+        "feedback": "Chính xác — Query và Key dùng để so khớp, còn Value mang nội dung được kết hợp theo mức liên quan. Giữ cách diễn đạt ngắn gọn như vậy là ổn.",
+        "next_question": "Bạn có thể đưa một ví dụ ngắn (một Query, một Key và một Value) và giải thích cách trọng số từ sự so khớp ảnh hưởng đến giá trị đầu ra không?",
         "source_ids": [
           "T06-130",
           "T06-131"
@@ -169,14 +169,14 @@
         "decision_code": "SPECIFIC_CONCEPT_ERROR",
         "passed": false,
         "misconceptions": [
-          "Người học khẳng định rằng 'self' nghĩa là mỗi token bị cô lập và chỉ nhìn chính nó."
+          "Người học khẳng định \"self\" nghĩa là mỗi token bị cô lập và chỉ nhìn chính nó, không dùng các vị trí khác."
         ],
         "missing_ideas": [
-          "Cùng một chuỗi đầu vào (Query, Key, Value được tạo từ cùng chuỗi)",
-          "Vẫn sử dụng ngữ cảnh giữa các vị trí (token có thể nhìn các token khác)"
+          "Query, Key và Value được tạo từ cùng một chuỗi đầu vào",
+          "Mỗi vị trí vẫn có thể sử dụng ngữ cảnh từ các vị trí khác (tokens có thể 'nhìn' nhau)"
         ],
-        "feedback": "Bạn đã trả lời đúng lựa chọn nhưng giải thích chứa hiểu nhầm: 'self' không có nghĩa là mỗi token bị cô lập. Trong self-attention, Q/K/V cùng từ một chuỗi và các token có thể nhìn nhau để dùng ngữ cảnh.",
-        "next_question": "Nếu Query, Key và Value đều được tạo từ cùng một chuỗi đầu vào, bằng cơ chế nào một vị trí có thể kết hợp thông tin từ vị trí khác trong chuỗi?",
+        "feedback": "Bạn chọn đáp án đúng nhưng giải thích sai: 'self' không có nghĩa là các token bị cô lập. Trong self-attention, Query/Key/Value cùng từ một chuỗi và các token có thể nhìn nhau theo cơ chế attention; hãy sửa lại giải thích để nêu rõ hai điểm này.",
+        "next_question": "Nếu Query, Key và Value đều từ cùng một chuỗi đầu vào, làm thế nào một token có thể dùng thông tin từ token khác khi tính attention?",
         "source_ids": [
           "T06-086",
           "T06-126"
@@ -247,8 +247,8 @@
           "Mức độ liên quan theo ngữ cảnh",
           "Kết hợp thông tin theo trọng số"
         ],
-        "feedback": "Lời giải hiện không giải thích nội dung khái niệm; bạn chỉ viết 'Tui không hiểu.' Hãy nêu rõ rằng attention đánh giá mức độ liên quan giữa các từ trong ngữ cảnh và sau đó kết hợp thông tin bằng các trọng số tương ứng.",
-        "next_question": "Khi gặp từ 'nó', attention cần làm gì với các token khác để xác định nghĩa? Hãy liệt kê hai bước chính mà cơ chế attention thực hiện (không cần giải thích chi tiết).",
+        "feedback": "Bạn đã chọn đáp án đúng nhưng phần giải thích chỉ là \"Tui không hiểu\" nên chưa giải thích khái niệm. Vui lòng nêu rằng attention đánh giá mức độ liên quan của các từ theo ngữ cảnh và sau đó kết hợp thông tin bằng các trọng số tương ứng.",
+        "next_question": "Khi xử lý từ \"nó\" trong câu, attention dựa vào đặc điểm nào của các token khác để gán trọng số, và những trọng số đó được dùng thế nào để tạo biểu diễn ngữ cảnh cho \"nó\"?",
         "source_ids": [
           "T06-130",
           "T06-133"
@@ -273,7 +273,7 @@
         "nextQuestion": true
       },
       "diagnostics": {
-        "requiredTerms": false
+        "requiredTerms": true
       },
       "failure_reasons": [],
       "review": {
@@ -282,11 +282,11 @@
         "passed": false,
         "misconceptions": [],
         "missing_ideas": [
-          "Query và Key dùng để so khớp để tạo trọng số",
-          "Value mang nội dung được kết hợp thành đầu ra"
+          "Query và Key được so khớp để tạo trọng số (phải nêu rõ mối quan hệ này).",
+          "Value là nội dung đi kèm và được kết hợp theo các trọng số đó để tạo đầu ra."
         ],
-        "feedback": "Lời giải quá ngắn và không giải thích cơ chế: chưa nêu Query/Key tạo trọng số thế nào và Value chứa nội dung ra sao. Hãy viết rõ Query được so sánh với Key để sinh trọng số, rồi Value được kết hợp theo trọng số đó để tạo đầu ra.",
-        "next_question": "Bạn có thể mô tả cách Query và Key tạo trọng số và vai trò của Value trong việc sinh đầu ra không?",
+        "feedback": "Bạn đã chọn đáp án đúng nhưng phần giải thích chưa nêu khái niệm cụ thể: chưa giải thích cách Query và Key sinh trọng số và cách Value được kết hợp. Hãy mô tả rõ cơ chế so khớp và tổng hợp nội dung.",
+        "next_question": "Bạn có thể mô tả các bước Query được so sánh với Key để tính trọng số, và trọng số đó được dùng thế nào để kết hợp các Value thành đầu ra không?",
         "source_ids": [
           "T06-130",
           "T06-131"
@@ -391,8 +391,8 @@
           "Mức độ liên quan theo ngữ cảnh",
           "Kết hợp thông tin theo trọng số"
         ],
-        "feedback": "Bạn chỉ viết 'Không đúng, chưa chính xác.' nên lời giải chưa đủ cụ thể. Hãy nêu rằng attention đánh giá mức liên quan giữa các từ theo ngữ cảnh và dùng các trọng số đó để kết hợp thông tin cho từ 'nó'.",
-        "next_question": "Khi xử lý từ 'nó', attention so sánh các từ trong ngữ cảnh như thế nào — chỉ dựa vào từ gần nhất hay dùng toàn bộ ngữ cảnh để gán trọng số?",
+        "feedback": "Lời giải chưa đủ; bạn chỉ ghi “Không đúng, chưa chính xác” mà không giải thích cơ chế attention. Hãy nêu attention đánh giá mức độ liên quan giữa các từ với từ đang xét và kết hợp các thông tin đó bằng trọng số để tạo biểu diễn theo ngữ cảnh.",
+        "next_question": "Khi xử lý từ “nó” trong câu, bạn nghĩ mô hình nên cân nhắc những từ nào và việc gán trọng số cho các từ đó giúp xác định ý nghĩa của “nó” ra sao?",
         "source_ids": [
           "T06-130",
           "T06-133"
@@ -426,11 +426,11 @@
         "passed": false,
         "misconceptions": [],
         "missing_ideas": [
-          "Query và Key được dùng để so khớp (tạo trọng số)",
-          "Value mang nội dung được kết hợp thành đầu ra"
+          "Query và Key dùng để so khớp để tính trọng số",
+          "Value chứa nội dung và được kết hợp theo các trọng số đó"
         ],
-        "feedback": "Lời giải hiện tại không có nội dung có ý nghĩa (chỉ là ký tự rác), nên chưa chứng minh vì sao chọn đáp án. Vui lòng giải thích rõ vai trò của Query/Key trong việc so khớp và cách Value được kết hợp thành đầu ra.",
-        "next_question": "Bạn có thể mô tả Query được so khớp với Key như thế nào để tạo trọng số, và Value rồi được dùng ra sao để sinh đầu ra?",
+        "feedback": "Lời giải của bạn không có nội dung giải thích (chỉ là chuỗi ký tự). Vui lòng nêu rõ rằng Query so khớp với Key để tạo trọng số, và Value mang nội dung được tổ hợp thành đầu ra, theo tài liệu giáo viên.",
+        "next_question": "Bạn có thể tóm tắt trong một câu cách Query được so khớp với Key để tạo trọng số và cách Value được kết hợp theo các trọng số đó không?",
         "source_ids": [
           "T06-130",
           "T06-131"
@@ -463,15 +463,15 @@
         "decision_code": "SPECIFIC_CONCEPT_ERROR",
         "passed": false,
         "misconceptions": [
-          "Attention cho phép LLM truy cập Internet.",
-          "Mô hình 'luôn biết mọi thông tin' và không bao giờ nhầm ngữ cảnh."
+          "Nói rằng attention cho phép LLM truy cập Internet và vì vậy mô hình luôn biết mọi thông tin — đây là sai.",
+          "Nói rằng mô hình 'không bao giờ nhầm ngữ cảnh' — attention không đảm bảo luôn giải quyết đúng mọi sự mơ hồ."
         ],
         "missing_ideas": [
-          "Mức độ liên quan theo ngữ cảnh.",
-          "Kết hợp thông tin theo trọng số."
+          "Mức độ liên quan theo ngữ cảnh (attention đánh giá mức tương đồng giữa các token).",
+          "Kết hợp thông tin theo trọng số (dùng các trọng số từ attention để tổng hợp thông tin)."
         ],
-        "feedback": "Bạn chọn đáp án đúng nhưng giải thích chứa khẳng định sai: attention không cấp truy cập Internet và mô hình không 'luôn biết mọi thông tin'. Hãy sửa lại để giải thích attention là đánh giá mức độ liên quan theo ngữ cảnh và kết hợp thông tin bằng trọng số.",
-        "next_question": "Khi xử lý từ 'nó' trong câu, attention dựa vào đặc điểm nào của các từ khác để gán trọng số và tạo biểu diễn ngữ cảnh cho 'nó'?",
+        "feedback": "Giải thích hiện nay chứa hai khẳng định sai về cơ chế attention (không liên quan tới Internet và không hoàn hảo). Hãy nêu rằng attention đánh giá mức độ liên quan giữa các từ và dùng các trọng số đó để kết hợp thông tin khi tạo biểu diễn theo ngữ cảnh.",
+        "next_question": "Bạn có thể mô tả ngắn cách attention so sánh các token với nhau và vì sao cần dùng trọng số để tổng hợp thông tin cho từ 'nó'?",
         "source_ids": [
           "T06-130",
           "T06-133"
@@ -505,8 +505,8 @@
         "passed": true,
         "misconceptions": [],
         "missing_ideas": [],
-        "feedback": "Chính xác — Query là truy vấn cần tìm, Key để so khớp, và Value mang nội dung được kết hợp thành đầu ra. Giữ cách diễn đạt ngắn gọn và rõ ràng như vậy.",
-        "next_question": "Hãy nêu một ví dụ cụ thể (ví dụ khi tra cứu trong một tập văn bản): Query, Key và Value trong trường hợp đó sẽ là gì?",
+        "feedback": "Chính xác. Query là truy vấn, Key để so khớp và Value chứa nội dung được kết hợp để tạo đầu ra.",
+        "next_question": "Bạn có thể mô tả ngắn cách Query và Key được so khớp để tính trọng số cho các Value không?",
         "source_ids": [
           "T06-130",
           "T06-131"
@@ -539,14 +539,14 @@
         "decision_code": "SPECIFIC_CONCEPT_ERROR",
         "passed": false,
         "misconceptions": [
-          "Khẳng định rằng attention luôn chọn danh từ gần đại từ nhất và rằng khoảng cách quyết định hoàn toàn là sai."
+          "Khẳng định rằng attention luôn chọn danh từ gần đại từ nhất (khoảng cách quyết định hoàn toàn)."
         ],
         "missing_ideas": [
-          "Mức độ liên quan theo ngữ cảnh",
-          "Kết hợp thông tin theo trọng số"
+          "Kết hợp thông tin theo trọng số (attention không chỉ chọn một từ duy nhất mà cân nhắc và gán trọng số).",
+          "Mức độ liên quan theo ngữ cảnh được đánh giá giữa các token, không chỉ dựa vào khoảng cách vị trí."
         ],
-        "feedback": "Bạn đúng khi nói attention dùng ngữ cảnh, nhưng không chính xác nếu cho rằng nó luôn chọn từ gần nhất; attention tính trọng số dựa trên mức liên quan/độ tương đồng, không chỉ khoảng cách. Hãy bổ sung rằng hệ thống so sánh và kết hợp thông tin theo trọng số để diễn giải đại từ trong ngữ cảnh.",
-        "next_question": "Trong câu \"Nam nhìn Hùng vì anh ấy mệt\", theo bạn attention sẽ dựa vào yếu tố nào để gán trọng số cho \"anh ấy\": khoảng cách vị trí hay mức tương đồng ngữ cảnh? Viết một câu giải thích ngắn.",
+        "feedback": "Bạn đúng là attention dùng ngữ cảnh, nhưng sai khi nói nó luôn chọn danh từ gần nhất. Attention đánh giá mức độ liên quan giữa các token và kết hợp thông tin bằng trọng số; khoảng cách vị trí không luôn quyết định hoàn toàn. Hãy nhấn mạnh cơ chế so khớp/ước lượng trọng số thay vì khẳng định chọn theo cự ly.",
+        "next_question": "Khi attention xử lý từ “nó” trong câu ví dụ, những yếu tố nào (ngoài khoảng cách vị trí) có thể khiến một từ khác được gán trọng số lớn hơn?",
         "source_ids": [
           "T06-130",
           "T06-133"
@@ -648,8 +648,8 @@
         "passed": true,
         "misconceptions": [],
         "missing_ideas": [],
-        "feedback": "Đúng — bạn đã nêu rõ cả hai ý chính: attention đánh giá mức liên quan theo ngữ cảnh và kết hợp thông tin bằng các trọng số; ghi nhận rằng cơ chế này không luôn giải quyết mọi mơ hồ là phù hợp.",
-        "next_question": "Bạn có thể nêu một ví dụ khác mà attention giúp xác định tham chiếu \"nó\" và một ví dụ mà attention vẫn có thể gây nhầm lẫn không?",
+        "feedback": "Đúng — bạn đã nêu hai ý chính: attention đánh giá mức liên quan theo ngữ cảnh và kết hợp thông tin bằng các trọng số; đồng thời nhận ra cơ chế này không luôn giải quyết mọi câu mơ hồ.",
+        "next_question": "Hãy đưa một ví dụ câu mà attention vẫn có thể mơ hồ về “nó” và nêu thông tin ngữ cảnh bổ sung có thể giúp phân giải ý nghĩa?",
         "source_ids": [
           "T06-130",
           "T06-133"
@@ -717,8 +717,8 @@
         "passed": true,
         "misconceptions": [],
         "missing_ideas": [],
-        "feedback": "Giải thích chính xác: Q, K và V cùng được tạo từ cùng một chuỗi đầu vào, và mỗi vị trí vẫn có thể tham chiếu ngữ cảnh của các vị trí khác theo attention mask. Cách diễn đạt ngắn gọn và đúng trọng tâm.",
-        "next_question": "Attention mask đóng vai trò gì trong self-attention và nó thay đổi cách mô hình sử dụng ngữ cảnh ra sao?",
+        "feedback": "Đúng — bạn nêu rõ Q, K, V cùng xuất phát từ cùng chuỗi và rằng mỗi vị trí vẫn có thể tham chiếu các vị trí khác theo attention mask.",
+        "next_question": "Làm thế nào self-attention cho phép các token ‘nhìn’ nhau nhưng vẫn được xử lý song song trong mô hình?",
         "source_ids": [
           "T06-086",
           "T06-126"
@@ -751,15 +751,15 @@
         "decision_code": "SPECIFIC_CONCEPT_ERROR",
         "passed": false,
         "misconceptions": [
-          "Ghi rằng Value được dùng để so khớp với Query (thực ra Key là để so khớp).",
-          "Ghi rằng Query mang toàn bộ nội dung được tổng hợp (thực ra Value chứa nội dung được kết hợp thành đầu ra)."
+          "Kết luận rằng Value dùng để so khớp truy vấn (thực tế việc so khớp là giữa Query và Key).",
+          "Nói Query mang toàn bộ nội dung được tổng hợp (thực tế Value chứa nội dung được kết hợp thành đầu ra)."
         ],
         "missing_ideas": [
-          "Query và Key được so khớp để tính trọng số.",
-          "Value mang nội dung, các Value được kết hợp theo trọng số đó để tạo đầu ra."
+          "Query và Key được dùng để so khớp để tính trọng số.",
+          "Value mang nội dung được kết hợp theo các trọng số để tạo đầu ra."
         ],
-        "feedback": "Lời giải hiện chứa hai khẳng định sai: Value không phải để so khớp và Query không phải là nội dung đầu ra. Hãy sửa bằng cách nêu rõ Query so khớp với Key để tạo trọng số, rồi Value là nội dung được kết hợp theo các trọng số đó.",
-        "next_question": "Nếu Query được so sánh với Key để tạo trọng số, theo bạn Value được dùng như thế nào để tạo đầu ra?",
+        "feedback": "Bạn chọn đúng phương án nhưng giải thích sai: bạn đã đảo vai trò của Query và Value. Sửa lại bằng cách nêu rõ Query so khớp với Key để tạo trọng số, còn Value là nội dung được kết hợp thành đầu ra (theo T06-130, T06-131).",
+        "next_question": "Nếu Query được so sánh với Key để tính trọng số, thành phần nào sẽ chứa nội dung được kết hợp thành đầu ra?",
         "source_ids": [
           "T06-130",
           "T06-131"

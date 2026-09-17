@@ -1,10 +1,18 @@
 const VERDICTS = new Set(['correct', 'misconception', 'insufficient', 'out_of_scope']);
+const DECISION_CODES_BY_VERDICT = {
+  correct: new Set(['RUBRIC_SATISFIED']),
+  misconception: new Set(['SPECIFIC_CONCEPT_ERROR']),
+  insufficient: new Set(['INSUFFICIENT_EXPLANATION', 'INSTRUCTION_OVERRIDE']),
+  out_of_scope: new Set(['UNRELATED_REQUEST', 'AUTHORITY_BOUNDARY']),
+};
+const DECISION_CODES = new Set(Object.values(DECISION_CODES_BY_VERDICT).flatMap((codes) => [...codes]));
 
 export const reviewJsonSchema = {
   type: 'object',
   additionalProperties: false,
   required: [
     'verdict',
+    'decision_code',
     'passed',
     'misconceptions',
     'missing_ideas',
@@ -14,6 +22,7 @@ export const reviewJsonSchema = {
   ],
   properties: {
     verdict: { type: 'string', enum: [...VERDICTS] },
+    decision_code: { type: 'string', enum: [...DECISION_CODES] },
     passed: { type: 'boolean' },
     misconceptions: { type: 'array', items: { type: 'string' }, maxItems: 3 },
     missing_ideas: { type: 'array', items: { type: 'string' }, maxItems: 4 },
@@ -83,6 +92,10 @@ export function validateReview(value, allowedSourceIds = []) {
     throw new TypeError('Phản hồi AI có trường thiếu hoặc không được phép.');
   }
   if (!VERDICTS.has(value.verdict)) throw new TypeError('Verdict không hợp lệ.');
+  if (!DECISION_CODES.has(value.decision_code)) throw new TypeError('Decision code không hợp lệ.');
+  if (!DECISION_CODES_BY_VERDICT[value.verdict].has(value.decision_code)) {
+    throw new TypeError('Decision code không nhất quán với verdict.');
+  }
   if (typeof value.passed !== 'boolean') throw new TypeError('passed phải là boolean.');
   if (value.passed !== (value.verdict === 'correct')) {
     throw new TypeError('passed không nhất quán với verdict.');
@@ -101,4 +114,3 @@ export function validateReview(value, allowedSourceIds = []) {
   }
   return value;
 }
-

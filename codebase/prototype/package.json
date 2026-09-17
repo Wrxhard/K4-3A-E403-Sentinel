@@ -10,6 +10,7 @@
     "test": "node --test tests/*.test.mjs",
     "eval:validate": "node ../../eval/validate-golden.mjs",
     "eval:run": "node --use-system-ca ../../eval/run-eval.mjs",
+    "eval:run2": "node --use-system-ca ../../eval/run-eval.mjs --run-number=2",
     "test:sites": "node --test tests/sites-worker.test.mjs"
   },
   "dependencies": {

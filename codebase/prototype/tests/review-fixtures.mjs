@@ -19,6 +19,7 @@ export const validInput = (overrides = {}) => ({
 
 export const validReview = Object.freeze({
   verdict: 'correct',
+  decision_code: 'RUBRIC_SATISFIED',
   passed: true,
   misconceptions: [],
   missing_ideas: [],
@@ -44,4 +45,3 @@ export function responseBody(review = validReview) {
     usage: { input_tokens: 100, output_tokens: 50, total_tokens: 150 },
   };
 }
-

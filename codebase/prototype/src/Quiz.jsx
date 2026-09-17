@@ -1,28 +1,183 @@
-import React,{useEffect,useRef,useState} from 'react';
-import {Sparkle,CheckCircle,Check,Cards,FileText,Play,Lightbulb,SkipForward,ArrowRight,Trophy} from '@phosphor-icons/react';
-import {timeLabel,rewardForCorrect,socialProofMessage,firstTryMissRate} from './learning';
-import {reviewExplanation} from './reviewApi';
+import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { ArrowRight, Cards, CheckCircle, FileText, Lightbulb, Play, SkipForward, Sparkle } from '@phosphor-icons/react';
+import { rewardForCorrect, timeLabel } from './learning';
+import { reviewExplanation } from './reviewApi';
 
-const verdictHeading={misconception:'Cách hiểu này còn một điểm chưa đúng',insufficient:'Phần giải thích chưa đủ căn cứ',out_of_scope:'Nội dung này nằm ngoài checkpoint'};
+const verdictHeading = {
+  misconception: 'Có một ý cần sửa',
+  insufficient: 'Bạn cần giải thích rõ hơn',
+  out_of_scope: 'Câu này nằm ngoài bài học',
+};
 
-export function Quiz({checkpoint,onSkip,onComplete,onSource,alreadyCompleted=false}){
- const [answer,setAnswer]=useState(null),[reason,setReason]=useState(''),[feedback,setFeedback]=useState(''),[wrong,setWrong]=useState(false),[earnedPoints,setEarnedPoints]=useState(0),[aiReview,setAiReview]=useState(null),[reviewError,setReviewError]=useState('');
- const dialog=useRef(null);
- const earnedPreviously=useRef(alreadyCompleted);
- const reviewing=feedback==='reviewing';
- useEffect(()=>{const previous=document.activeElement;dialog.current?.focus();return()=>previous?.focus?.();},[]);
- async function submit(e){e.preventDefault();if(answer===null){setFeedback('empty');return;}if(answer!==checkpoint.correct){setWrong(true);setFeedback('hint');return;}if(!reason.trim()){setFeedback('reason');return;}setFeedback('reviewing');setAiReview(null);setReviewError('');try{const review=await reviewExplanation({checkpointId:checkpoint.id,answer,explanation:reason});setAiReview(review);if(review.passed){setFeedback('success');setEarnedPoints(rewardForCorrect({alreadyCompleted:earnedPreviously.current,firstTry:!wrong}));onComplete(checkpoint,wrong,false);}else{setWrong(true);setFeedback('ai_feedback');}}catch(error){setReviewError(error.message);setFeedback('ai_error');}}
- function chooseAnswer(index){setAnswer(index);setFeedback('');setAiReview(null);setReviewError('');}
- function updateReason(value){setReason(value);if(feedback==='ai_feedback'||feedback==='ai_error'){setFeedback('');setAiReview(null);setReviewError('');}}
- function trap(e){if(e.key==='Escape'){onSkip();return;}if(e.key!=='Tab')return;const nodes=dialog.current.querySelectorAll('button,textarea,input,[tabindex="0"]');const first=nodes[0],last=nodes[nodes.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}
- return <div className="quiz-shade"><section className="quiz" role="dialog" aria-modal="true" aria-labelledby="quiz-title" tabIndex={-1} ref={dialog} onKeyDown={trap}>
-  <div className="quiz-top"><span className="eyebrow"><Sparkle weight="fill"/> ĐIỂM DỪNG HỌC TẬP</span><span className="tag">{timeLabel(checkpoint.time)}</span></div>
-  {feedback==='success'?<><div className="success-heading"><CheckCircle size={35} weight="fill"/><div><h2 id="quiz-title">Bạn đã chọn đúng!</h2><p>Đáp án và phần giải thích đã được OpenAI đối chiếu với ý chuẩn của giáo viên.</p></div><span className="xp-badge">{earnedPreviously.current?'Đã nhận XP':`+${earnedPoints} XP`}</span></div><div className="social-proof"><Trophy size={25} weight="fill"/><div><strong>{socialProofMessage({firstTry:!wrong,missRate:firstTryMissRate(checkpoint.responseStats)})}</strong><small>Tính từ {checkpoint.responseStats.participants} lượt tham gia mẫu · sẽ dùng dữ liệu thật khi tích hợp</small></div></div><p className="explanation">{checkpoint.explanation}</p><div className="reason-recap"><strong>Lý do của bạn</strong><p>{reason}</p><small>AI verdict: correct · Nguồn {aiReview?.source_ids.join(', ')||'giáo viên'}</small></div><button className="source-link" onClick={()=>onSource(checkpoint)}><FileText/> Transcript mẫu · {timeLabel(checkpoint.start)}–{timeLabel(checkpoint.time)}</button><details className="inline-source"><summary>Đọc đoạn trích tại đây</summary><p>“{checkpoint.source}”</p></details><div className="card-added"><Cards size={23}/><span><strong>{earnedPreviously.current?'Flashcard đã có trong bộ ôn tập':'Đã thêm vào bộ ôn tập'}</strong><small>{wrong&&!earnedPreviously.current?'Flashcard này được đánh dấu cần ôn lại.':'Mở tab Flashcards để ôn lại khái niệm.'}</small></span><Check/></div><button className="primary full" onClick={()=>onComplete(checkpoint,wrong,true)}>Tiếp tục video <Play weight="fill"/></button></>:<form onSubmit={submit}>
-   <div className="quiz-heading"><h2 id="quiz-title">Dừng một chút, nhớ lâu hơn.</h2><p>Bạn vừa học về <strong>{checkpoint.concept}</strong>. Thử một ví dụ mới nhé.</p></div><h3>{checkpoint.question}</h3>
-   <div className="answers">{checkpoint.options.map((option,i)=><label key={option} className={`answer ${answer===i?'selected':''} ${feedback==='hint'&&answer===i?'incorrect':''}`}><input type="radio" name="answer" checked={answer===i} disabled={reviewing} onChange={()=>chooseAnswer(i)}/><span className="answer-letter">{'ABC'[i]}</span><span>{option}</span>{answer===i&&<Check size={18}/>}</label>)}</div>
-   <label className="reason-label" htmlFor="reason">Vì sao bạn chọn đáp án này? <span>Một câu ngắn là đủ</span></label><textarea id="reason" rows={2} value={reason} disabled={reviewing} maxLength={1200} onChange={e=>updateReason(e.target.value)} placeholder="Mình nghĩ rằng…"/>
-   <div aria-live="polite">{feedback==='reviewing'&&<div className="ai-reviewing"><Sparkle/><span><strong>OpenAI đang đối chiếu lời giải…</strong>Kiểm tra theo câu hỏi mẫu, rubric và transcript giáo viên.</span></div>}{feedback==='ai_feedback'&&aiReview&&<div className="teacher-feedback ai-feedback"><div><Lightbulb size={22}/><span><strong>{verdictHeading[aiReview.verdict]||'Cần xem lại lời giải'}</strong>{aiReview.feedback}</span></div>{aiReview.misconceptions.length>0&&<><small>ĐIỂM HIỂU SAI</small><div className="missing-criteria">{aiReview.misconceptions.map(item=><span key={item}>{item}</span>)}</div></>}{aiReview.missing_ideas.length>0&&<><small>Ý CẦN BỔ SUNG</small><div className="missing-criteria">{aiReview.missing_ideas.map(item=><span key={item}>{item}</span>)}</div></>}<p className="next-question"><strong>Thử nghĩ tiếp:</strong> {aiReview.next_question}</p><div className="ai-source"><FileText/> Nguồn giáo viên: {aiReview.source_ids.join(', ')||'rubric checkpoint'}</div></div>}{feedback==='ai_error'&&<div className="ai-error"><Lightbulb/><span><strong>Chưa thể xác minh bằng AI</strong>{reviewError}</span></div>}{feedback&&['hint','reason','empty'].includes(feedback)&&<div className={`feedback ${feedback==='hint'?'hint':''}`}><Lightbulb size={21}/><span>{feedback==='hint'?checkpoint.hint:feedback==='reason'?'Đáp án đúng rồi! Hãy thêm lý do trước khi gửi OpenAI kiểm tra.':'Bạn hãy chọn một đáp án để tiếp tục.'}</span></div>}</div>
-   <div className="quiz-footer"><button type="button" className="text-button" disabled={reviewing} onClick={onSkip}>Bỏ qua lúc này <SkipForward/></button><button type="submit" className="primary" disabled={reviewing}>{reviewing?'Đang kiểm tra…':feedback==='hint'?'Thử lại':feedback==='ai_feedback'||feedback==='ai_error'?'Kiểm tra lại giải thích':'Kiểm tra bằng AI'} {!reviewing&&<ArrowRight/>}</button></div><p className="quiz-note">Đáp án và giải thích đều đúng: +20 XP · Qua ngay lần đầu: thưởng thêm 10 XP.</p>
-  </form>}
- </section></div>;
+// Trên điện thoại, đặt quiz ngoài player để không bị cắt bởi khung video.
+// VisualViewport cho biết phần màn hình còn lại khi bàn phím đang mở.
+function useMobileViewport() {
+  const [viewport, setViewport] = useState(null);
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 760px)');
+    const visible = window.visualViewport;
+    function update() {
+      setViewport(query.matches ? {
+        height: visible?.height ?? window.innerHeight,
+        top: visible?.offsetTop ?? 0,
+      } : null);
+    }
+    update();
+    query.addEventListener('change', update);
+    window.addEventListener('resize', update);
+    visible?.addEventListener('resize', update);
+    visible?.addEventListener('scroll', update);
+    return () => {
+      query.removeEventListener('change', update);
+      window.removeEventListener('resize', update);
+      visible?.removeEventListener('resize', update);
+      visible?.removeEventListener('scroll', update);
+    };
+  }, []);
+  return viewport;
+}
+
+export function Quiz({ checkpoint, onSkip, onComplete, alreadyCompleted = false }) {
+  const [answer, setAnswer] = useState(null);
+  const [reason, setReason] = useState('');
+  const [feedback, setFeedback] = useState('');
+  const [wrong, setWrong] = useState(false);
+  const [earnedPoints, setEarnedPoints] = useState(0);
+  const [aiReview, setAiReview] = useState(null);
+  const [reviewError, setReviewError] = useState('');
+  const dialog = useRef(null);
+  const reasonInput = useRef(null);
+  const scrollBody = useRef(null);
+  const feedbackRegion = useRef(null);
+  const viewport = useMobileViewport();
+  const mobile = viewport !== null;
+  const pendingRequest = useRef(null);
+  const active = useRef(true);
+  const earnedPreviously = useRef(alreadyCompleted);
+  const reviewing = feedback === 'reviewing';
+  const citedSources = (checkpoint.teacherSources || []).filter(source => aiReview?.source_ids.includes(source.id));
+
+  useEffect(() => {
+    active.current = true;
+    const previous = document.activeElement;
+    dialog.current?.focus();
+    return () => {
+      active.current = false;
+      if (pendingRequest.current) pendingRequest.current.cancelled = true;
+      previous?.focus?.();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!mobile) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    dialog.current?.focus({ preventScroll: true });
+    return () => { document.body.style.overflow = previousOverflow; };
+  }, [mobile]);
+
+  // Đưa phản hồi vào vùng đọc, không bật bàn phím trước khi học viên đọc xong.
+  useEffect(() => {
+    const container = scrollBody.current;
+    if (!container) return;
+    if (feedback === 'success') {
+      container.scrollTop = 0;
+      dialog.current?.focus({ preventScroll: true });
+      return;
+    }
+    if (!['hint', 'ai_feedback', 'ai_error', 'empty'].includes(feedback)) return;
+    const region = feedbackRegion.current;
+    if (!region) return;
+    container.scrollTop += region.getBoundingClientRect().top - container.getBoundingClientRect().top - 12;
+    region.focus({ preventScroll: true });
+  }, [feedback]);
+
+  function editReason() {
+    reasonInput.current?.focus();
+  }
+
+  function skip() {
+    active.current = false;
+    if (pendingRequest.current) pendingRequest.current.cancelled = true;
+    onSkip();
+  }
+
+  async function submit(event) {
+    event.preventDefault();
+    if (answer === null) { setFeedback('empty'); return; }
+    if (answer !== checkpoint.correct) { setWrong(true); setFeedback('hint'); return; }
+    if (!reason.trim()) { setFeedback('reason'); reasonInput.current?.focus(); return; }
+
+    // Chỉ đánh dấu lượt đánh giá còn hiệu lực trong giao diện; API hiện có không cần thay đổi.
+    const request = { cancelled: false };
+    pendingRequest.current = request;
+    setFeedback('reviewing');
+    setAiReview(null);
+    setReviewError('');
+    reasonInput.current?.blur();
+    try {
+      const review = await reviewExplanation({ checkpointId: checkpoint.id, answer, explanation: reason });
+      // Không áp dụng phản hồi đến muộn sau khi học viên bỏ qua.
+      if (!active.current || request.cancelled) return;
+      setAiReview(review);
+      if (review.passed) {
+        setFeedback('success');
+        setEarnedPoints(rewardForCorrect({ alreadyCompleted: earnedPreviously.current, firstTry: !wrong }));
+        onComplete(checkpoint, wrong, false);
+      } else {
+        setWrong(true);
+        setFeedback('ai_feedback');
+      }
+    } catch (error) {
+      if (!active.current || request.cancelled) return;
+      setReviewError(error.message);
+      setFeedback('ai_error');
+    } finally {
+      if (pendingRequest.current === request) pendingRequest.current = null;
+    }
+  }
+
+  function trap(event) {
+    if (event.key === 'Escape') { skip(); return; }
+    if (event.key !== 'Tab') return;
+    const nodes = [...dialog.current.querySelectorAll('button:not(:disabled),textarea:not(:disabled),input:not(:disabled),summary')];
+    const first = nodes[0], last = nodes[nodes.length - 1];
+    if (!first) return;
+    if (event.shiftKey && (document.activeElement === first || document.activeElement === dialog.current)) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+  }
+
+  const content = <div className={`quiz-shade${mobile ? ' quiz-shade-mobile' : ''}`} style={mobile ? { top: viewport.top, height: viewport.height } : undefined}>
+    <section className="quiz" role="dialog" aria-modal="true" aria-labelledby="quiz-title" tabIndex={-1} ref={dialog} onKeyDown={trap}>
+      <div className="quiz-top"><span className="eyebrow"><Sparkle weight="fill"/> ĐIỂM DỪNG HỌC TẬP</span><span className="tag">{timeLabel(checkpoint.time)}</span></div>
+      {feedback === 'success' ? <>
+        <div className="quiz-scroll" ref={scrollBody}>
+        <div className="success-heading"><CheckCircle size={35} weight="fill"/><div><h2 id="quiz-title">Bạn đã giải thích đúng!</h2><p>Phần giải thích phù hợp với ý chính của bài học.</p></div><span className="xp-badge">{earnedPreviously.current ? 'Đã nhận XP' : `+${earnedPoints} XP`}</span></div>
+        <p className="explanation">{aiReview?.feedback}</p>
+        <div className="reason-recap"><strong>Lý do của bạn</strong><p>{reason}</p></div>
+        <details className="inline-source"><summary><FileText size={17}/> Xem đoạn bài giảng làm căn cứ</summary>{citedSources.length ? citedSources.map(source => <p key={source.id}>“{source.excerpt}” <small>· {source.id}</small></p>) : <p>AI chưa dẫn nguồn cụ thể cho phản hồi này.</p>}</details>
+        <div className="card-added"><Cards size={23}/><span><strong>{earnedPreviously.current ? 'Thẻ ôn tập đã có' : 'Đã thêm thẻ ôn tập'}</strong><small>{wrong ? 'Thẻ được đánh dấu cần ôn lại.' : 'Bạn có thể xem thẻ trong Góc học tập.'}</small></span></div>
+        </div>
+        <div className="quiz-footer"><button className="primary full" onClick={() => onComplete(checkpoint, wrong, true)}>Tiếp tục video <Play weight="fill"/></button></div>
+      </> : <form className="quiz-form" onSubmit={submit}>
+        <div className="quiz-scroll" ref={scrollBody}>
+        <div className="quiz-heading"><h2 id="quiz-title">Thử áp dụng điều vừa học</h2><p>Một câu ngắn về <strong>{checkpoint.concept}</strong>, rồi bạn có thể xem tiếp.</p></div>
+        <h3>{checkpoint.question}</h3>
+        <div className="answers">{checkpoint.options.map((option, index) => <label key={option} className={`answer ${answer === index ? 'selected' : ''} ${feedback === 'hint' && answer === index ? 'incorrect' : ''}`}><input type="radio" name="answer" checked={answer === index} disabled={reviewing} onChange={() => { setAnswer(index); setFeedback(''); setAiReview(null); }}/><span className="answer-letter">{'ABC'[index]}</span><span>{option}</span></label>)}</div>
+        <label className="reason-label" htmlFor="reason">Vì sao bạn chọn đáp án này? <span>Một câu ngắn là đủ</span></label>
+        <textarea ref={reasonInput} id="reason" rows={2} value={reason} disabled={reviewing} maxLength={1200} onChange={event => { setReason(event.target.value); if (feedback === 'ai_error') setFeedback(''); }} placeholder="Mình nghĩ rằng…"/>
+        <div className="quiz-feedback-region" ref={feedbackRegion} tabIndex={-1} aria-label="Phản hồi về câu trả lời" aria-live="polite">
+          {reviewing && <div className="ai-reviewing"><Sparkle/><span>Đang kiểm tra lời giải theo bài học…</span></div>}
+          {feedback === 'ai_feedback' && aiReview && <div className="teacher-feedback ai-feedback"><div><Lightbulb size={22}/><span><strong>{verdictHeading[aiReview.verdict] || 'Hãy xem lại lời giải'}</strong>{aiReview.feedback}</span></div><p className="next-question"><strong>Thử sửa lý do:</strong> {aiReview.next_question}</p><details className="review-details"><summary>Xem thêm góp ý và nguồn</summary>{aiReview.misconceptions.concat(aiReview.missing_ideas).map((item, index) => <p key={`${index}-${item}`}>{item}</p>)}{citedSources.length ? citedSources.map(source => <p key={source.id}>“{source.excerpt}” <small>· {source.id}</small></p>) : <p>AI chưa dẫn nguồn cụ thể cho phản hồi này.</p>}</details></div>}
+          {feedback === 'ai_error' && <div className="ai-error"><Lightbulb/><span><strong>Chưa thể kiểm tra lúc này</strong>{reviewError}</span></div>}
+          {['hint', 'reason', 'empty'].includes(feedback) && <div className={`feedback ${feedback === 'hint' ? 'hint' : ''}`}><Lightbulb size={21}/><span>{feedback === 'hint' ? checkpoint.hint : feedback === 'reason' ? 'Hãy thêm lý do để kiểm tra mức hiểu bài.' : 'Bạn hãy chọn một đáp án.'}</span></div>}
+          {feedback === 'ai_feedback' && <button type="button" className="edit-reason-button" onClick={editReason}>Sửa lý do <ArrowRight size={16}/></button>}
+        </div>
+        </div>
+        <div className="quiz-footer"><button type="button" className="text-button" onClick={skip}>Bỏ qua, xem tiếp video <SkipForward/></button><button type="submit" className="primary" disabled={reviewing}>{reviewing ? 'Đang kiểm tra…' : 'Kiểm tra lời giải'} {!reviewing && <ArrowRight/>}</button></div>
+      </form>}
+    </section>
+  </div>;
+  return mobile ? createPortal(content, document.body) : content;
 }

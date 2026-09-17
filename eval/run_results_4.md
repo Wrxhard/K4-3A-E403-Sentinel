@@ -1,7 +1,7 @@
-# CP3 · Kết quả kiểm thử lượt 1
+# CP3 · Kết quả kiểm thử lượt 4
 
-- Run ID: `run_20260917040029_4e2f7337`
-- Thời điểm hoàn tất: 2026-09-17T04:06:07.173Z
+- Run ID: `run_20260917033920_01b088c0`
+- Thời điểm hoàn tất: 2026-09-17T03:43:53.268Z
 - Model: `gpt-5-mini`
 - Tổng số ca: 20
 - Đạt: 20
@@ -47,4 +47,4 @@
 Không có ca sai lệch trong lượt chạy này. Kết quả vẫn chỉ phản ánh golden set hiện tại, không chứng minh hệ thống đúng tuyệt đối.
 ## Ghi chú trung thực
 
-Tỷ lệ trên được tính trực tiếp từ `run_results.json`. Lỗi API, lỗi định dạng và thiếu log đều được tính là không đạt; không có ca nào được sửa kết quả thủ công.
+Tỷ lệ trên được tính trực tiếp từ `run_results_4.json`. Lỗi API, lỗi định dạng và thiếu log đều được tính là không đạt; không có ca nào được sửa kết quả thủ công.

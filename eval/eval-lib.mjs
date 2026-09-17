@@ -6,13 +6,22 @@ const requiredDifficulties = [
 ];
 const allowedFrequencies = new Set(['common', 'edge', 'other']);
 const allowedVerdicts = new Set(['correct', 'misconception', 'insufficient', 'out_of_scope']);
+const allowedDecisionCodes = new Set([
+  'RUBRIC_SATISFIED',
+  'SPECIFIC_CONCEPT_ERROR',
+  'INSUFFICIENT_EXPLANATION',
+  'INSTRUCTION_OVERRIDE',
+  'UNRELATED_REQUEST',
+  'AUTHORITY_BOUNDARY',
+]);
 
 function normalized(value) {
   return String(value ?? '')
     .toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
-    .replace(/đ/g, 'd');
+    .replace(/đ/g, 'd')
+    .replace(/\bkhong nam (?:o )?trong pham vi\b/g, 'ngoai pham vi');
 }
 
 function assertCase(item, index) {
@@ -31,6 +40,12 @@ function assertCase(item, index) {
   if (!acceptance || !allowedVerdicts.has(acceptance.expected_verdict)) throw new TypeError(`${label} thiếu expected_verdict hợp lệ.`);
   if (typeof acceptance.expected_passed !== 'boolean') throw new TypeError(`${label} thiếu expected_passed.`);
   if (acceptance.expected_passed !== (acceptance.expected_verdict === 'correct')) throw new TypeError(`${label} có expected_passed không nhất quán.`);
+  if (!Array.isArray(acceptance.expected_decision_codes) || !acceptance.expected_decision_codes.length) {
+    throw new TypeError(`${label} thiếu expected decision code.`);
+  }
+  if (acceptance.expected_decision_codes.some((code) => !allowedDecisionCodes.has(code))) {
+    throw new TypeError(`${label} có expected decision code không hợp lệ.`);
+  }
   for (const field of ['required_terms_any', 'forbidden_phrases', 'allowed_source_ids']) {
     if (!Array.isArray(acceptance[field])) throw new TypeError(`${label} thiếu acceptance.${field}.`);
   }
@@ -66,12 +81,13 @@ export function scoreCase(definition, review) {
     ...(review.missing_ideas || []),
     review.next_question,
   ].join(' '));
+  const requiredTerms = acceptance.required_terms_any.every((group) =>
+    group.some((term) => combined.includes(normalized(term))),
+  );
   const checks = {
     verdict: review.verdict === acceptance.expected_verdict,
     passed: review.passed === acceptance.expected_passed,
-    requiredTerms: acceptance.required_terms_any.every((group) =>
-      group.some((term) => combined.includes(normalized(term))),
-    ),
+    decisionCode: acceptance.expected_decision_codes.includes(review.decision_code),
     forbiddenPhrases: acceptance.forbidden_phrases.every((phrase) => !combined.includes(normalized(phrase))),
     allowedSources: Array.isArray(review.source_ids) && review.source_ids.every((id) => acceptance.allowed_source_ids.includes(id)),
     minimumSources: Array.isArray(review.source_ids) && review.source_ids.length >= acceptance.minimum_source_ids,
@@ -80,13 +96,12 @@ export function scoreCase(definition, review) {
   const labels = {
     verdict: `expected verdict ${acceptance.expected_verdict}`,
     passed: `expected passed ${acceptance.expected_passed}`,
-    requiredTerms: 'missing required semantic terms',
+    decisionCode: `expected decision code ${acceptance.expected_decision_codes.join(' or ')}`,
     forbiddenPhrases: 'contains a forbidden claim',
     allowedSources: 'contains an unsupported source ID',
     minimumSources: `requires at least ${acceptance.minimum_source_ids} source ID(s)`,
     nextQuestion: 'missing a usable next question',
   };
   const failureReasons = Object.entries(checks).filter(([, passed]) => !passed).map(([key]) => labels[key]);
-  return { passed: failureReasons.length === 0, checks, failureReasons };
+  return { passed: failureReasons.length === 0, checks, diagnostics: { requiredTerms }, failureReasons };
 }
-

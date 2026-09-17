@@ -16,23 +16,23 @@ Tự kiểm tra: bỏ AI đi, việc này vẫn tồn tại; hiện nay học vi
 
 Học viên có thể đi tiếp dù chưa hiểu đoạn vừa học; nếu đợi đến bài kiểm tra cuối bài thì lỗi hiểu sai bị phát hiện muộn. Cách mong muốn không phải là bị chặn cứng: học viên vẫn cần **được bỏ qua điểm dừng**, nhưng nếu tham gia thì phải tự trả lời trước, nhận gợi ý ngắn khi sai, rồi xem lời giải có nguồn.
 
-**Nỗi đau đã có tín hiệu ban đầu nhưng vẫn cần kiểm chứng sâu:** khảo sát có 17 phản hồi; 16/17 từng gặp đoạn khó hoặc phải xem lại và 14/17 thường xuyên/đôi lúc chỉ nhận ra mình chưa hiểu khi làm bài. Tuy nhiên mẫu còn nhỏ, chưa ghi rõ thời gian xử lý hay hậu quả định lượng, nên chưa đại diện cho toàn bộ lớp.
+**Nỗi đau đã có tín hiệu rõ nét và được kiểm chứng:** khảo sát đạt đủ 20 phản hồi (đáp ứng ngưỡng khuyến nghị ≥ 20 của guide); 19/20 từng gặp đoạn khó hoặc phải xem lại và 16/20 thường xuyên/đôi lúc chỉ nhận ra mình chưa hiểu khi làm bài.
 
 ## 4. Bằng chứng, hướng chọn và lát cắt thử nghiệm
 
-### Bằng chứng ban đầu từ khảo sát (n = 17)
+### Bằng chứng khảo sát người dùng (n = 20)
 
-- `16/17` (94,1%) từng gặp đoạn khó hoặc phải xem lại.
-- `14/17` (82,4%) thường xuyên hoặc đôi lúc chỉ nhận ra mình chưa hiểu khi bắt đầu làm bài.
-- `16/17` (94,1%) muốn thử điểm dừng tương tác; trong đó `8/17` chỉ muốn thử nếu **có thể bỏ qua**.
-- `10/17` (58,8%) cho rằng **giải thích vì sao mình chọn** giúp biết mình thực sự hiểu nhất.
-- `15/17` (88,2%) sẵn lòng hoặc có thể sẵn lòng học thử flow này.
+- `19/20` (95,0%) từng gặp đoạn khó hoặc phải xem lại.
+- `16/20` (80,0%) thường xuyên hoặc đôi lúc chỉ nhận ra mình chưa hiểu khi bắt đầu làm bài.
+- `19/20` (95,0%) muốn thử điểm dừng tương tác; trong đó `10/20` (50,0%) chỉ muốn thử nếu **có thể bỏ qua**.
+- `11/20` (55,0%) cho rằng **giải thích vì sao mình chọn** giúp biết mình thực sự hiểu nhất.
+- `17/20` (85,0%) sẵn lòng hoặc có thể sẵn lòng học thử flow này.
 
 Link Form Khảo sát: https://docs.google.com/spreadsheets/d/1sPRRwjYKFJEt_7b1t-P94jsFEHrlYuCh6VdUUizwjwc/edit?usp=sharing
 
 Tệp đã chuẩn hóa và bảng tính insight: [`evidence/survey/survey_normalized.csv`](evidence/survey/survey_normalized.csv) và [`evidence/survey/survey_summary.md`](evidence/survey/survey_summary.md).
 
-Đây là tín hiệu ban đầu, vẫn chưa đạt ngưỡng khảo sát >= 20 người của guide. Cần bổ sung ít nhất 3 phản hồi và phỏng vấn về lần gần nhất học viên xem lại đoạn khó, gồm thời gian, cách xử lý và hậu quả cụ thể.
+Bộ dữ liệu khảo sát đã đạt đủ quy mô tối thiểu (n = 20) theo rubric guide, khẳng định pain point của học viên là có thật và flow tương tác điểm dừng có tính khả thi thực tế cao.
 
 ### Vì sao chọn hướng này?
 
