@@ -14,6 +14,7 @@ export const reviewJsonSchema = {
     'verdict',
     'decision_code',
     'passed',
+    'quality_score',
     'misconceptions',
     'missing_ideas',
     'feedback',
@@ -24,6 +25,7 @@ export const reviewJsonSchema = {
     verdict: { type: 'string', enum: [...VERDICTS] },
     decision_code: { type: 'string', enum: [...DECISION_CODES] },
     passed: { type: 'boolean' },
+    quality_score: { type: 'integer', minimum: 1, maximum: 5 },
     misconceptions: { type: 'array', items: { type: 'string' }, maxItems: 3 },
     missing_ideas: { type: 'array', items: { type: 'string' }, maxItems: 4 },
     feedback: { type: 'string', minLength: 1, maxLength: 500 },
@@ -99,6 +101,9 @@ export function validateReview(value, allowedSourceIds = []) {
   if (typeof value.passed !== 'boolean') throw new TypeError('passed phải là boolean.');
   if (value.passed !== (value.verdict === 'correct')) {
     throw new TypeError('passed không nhất quán với verdict.');
+  }
+  if (!Number.isInteger(value.quality_score) || value.quality_score < 1 || value.quality_score > 5) {
+    throw new TypeError('quality_score phải là số nguyên từ 1 đến 5.');
   }
   requireStringArray(value.misconceptions, 'misconceptions', 3);
   requireStringArray(value.missing_ideas, 'missing_ideas', 4);

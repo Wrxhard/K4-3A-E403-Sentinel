@@ -1,4 +1,4 @@
-function normalized(value) {
+export function normalized(value) {
   return String(value ?? '')
     .toLowerCase()
     .normalize('NFD')
@@ -47,6 +47,7 @@ export function enforceGuardrail(review, signal, input) {
     verdict: signal.verdict,
     decision_code: signal.decision_code,
     passed: false,
+    quality_score: 1,
     misconceptions: [],
     missing_ideas: [messages[signal.kind]],
     feedback: messages[signal.kind],

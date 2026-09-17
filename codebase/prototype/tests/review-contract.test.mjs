@@ -9,12 +9,28 @@ test('review schema rejects extra model-controlled fields', () => {
     'verdict',
     'decision_code',
     'passed',
+    'quality_score',
     'misconceptions',
     'missing_ideas',
     'feedback',
     'next_question',
     'source_ids',
   ]);
+});
+
+test('rejects an invalid quality_score outside 1 to 5', () => {
+  assert.throws(
+    () => validateReview({ ...validReview, quality_score: 0 }, ['T06-130']),
+    /quality_score/i,
+  );
+  assert.throws(
+    () => validateReview({ ...validReview, quality_score: 6 }, ['T06-130']),
+    /quality_score/i,
+  );
+  assert.throws(
+    () => validateReview({ ...validReview, quality_score: '5' }, ['T06-130']),
+    /quality_score/i,
+  );
 });
 
 test('rejects a decision code that disagrees with the verdict', () => {
