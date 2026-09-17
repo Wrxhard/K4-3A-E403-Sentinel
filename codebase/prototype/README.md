@@ -15,7 +15,7 @@ Copy-Item .env.example .env
 
 ```dotenv
 OPENAI_API_KEY=...
-OPENAI_MODEL=gpt-4o-mini
+OPENAI_MODEL=gpt-5-mini
 AI_LOG_PATH=./logs/ai-calls.jsonl
 ```
 
@@ -32,9 +32,10 @@ Mở `http://127.0.0.1:4173/`. Lệnh dev dùng kho chứng chỉ hệ thống c
 1. Người học chọn đáp án và tự giải thích khái niệm.
 2. `POST /api/review-explanation` chỉ nhận ID checkpoint và nội dung người học; server tự lấy nguồn tin cậy trong `src/lesson.js`.
 3. Prompt yêu cầu mô hình đối chiếu với đoạn transcript và câu hỏi/rubric mẫu của giáo viên, không tin chỉ dẫn nằm trong câu trả lời của người học.
-4. Mô hình trả một trong bốn verdict: `correct`, `misconception`, `insufficient`, `out_of_scope`.
+4. Mô hình trả một trong bốn verdict: `correct`, `misconception`, `insufficient`, `out_of_scope`, kèm `decision_code` có cấu trúc để không phụ thuộc câu chữ feedback.
 5. Nếu hiểu sai hoặc thiếu ý, UI hiện điểm hiểu sai, ý cần bổ sung và một câu hỏi gợi mở; không lộ thẳng đáp án. Chỉ verdict `correct` mới hoàn thành checkpoint và cộng XP.
-6. Mỗi lượt gọi ghi prompt đầu vào, phản hồi HTTP thô và kết quả parse vào JSONL. Header/API key không được ghi log.
+6. Guardrail xác định chặn các ca rõ ràng như prompt injection, chỉ có dấu câu, hỏi lịch, suy danh tính và tư vấn y tế; OpenAI vẫn được gọi để có raw response kiểm chứng.
+7. Mỗi lượt gọi ghi prompt đầu vào, phản hồi HTTP thô, kết quả model và kết quả sau guardrail vào JSONL. Header/API key không được ghi log.
 
 Các checkpoint hiện dùng nguồn mẫu có mã `T06-*` và câu hỏi/rubric giáo viên khai báo trong `src/lesson.js`. Player, dữ liệu tài khoản, BXH và thống kê cohort vẫn là dữ liệu mô phỏng được gắn nhãn trong UI.
 
@@ -46,20 +47,32 @@ Kiểm tra cấu trúc bộ 20 ca:
 npm.cmd run eval:validate
 ```
 
-Chạy lại toàn bộ 20 ca bằng OpenAI thật:
+Chạy lại toàn bộ 20 ca bằng OpenAI thật. Dùng số lượt mới để không ghi đè lịch sử:
 
 ```powershell
 npm.cmd run eval:run
+npm.cmd run eval:run -- --run-number=5
 ```
 
-Lượt 1 ngày 17/09/2026 dùng `gpt-4o-mini`: **13/20 ca đạt (65,0%)**. Bảy ca không đạt được giữ nguyên và phân tích trong `eval/run_results.md`; log thô đầy đủ nằm tại `eval/run_logs.jsonl`.
+### Số đo thực nghiệm
+
+| Lượt | Model | Thay đổi chính | Đạt | Tỷ lệ |
+|---:|---|---|---:|---:|
+| 1 | `gpt-4o-mini` | Baseline | 13/20 | 65,0% |
+| 2 | `gpt-4o-mini` | Thứ tự verdict và ví dụ guardrail trong prompt | 18/20 | 90,0% |
+| 3 | `gpt-4o-mini` | Chấp nhận diễn đạt ngắn/không dấu | 16/20 | 80,0% |
+| 4 | `gpt-5-mini` | Structured `decision_code`, guardrail xác định và scorer không dò feedback tự do | **20/20** | **100,0%** |
+
+Hai ca chưa đạt ở lượt 2 là `GS-005` và `GS-013`: `GS-005` đã có verdict đúng nhưng scorer bỏ sót cụm đồng nghĩa “không nằm trong phạm vi”; `GS-013` là lời giải QKV không dấu đúng nhưng model đòi thêm chi tiết vượt rubric. Lượt 3 giảm còn 16/20, chứng minh prompt tự do vẫn dao động. Vì vậy lượt 4 chuyển quyết định sang verdict + decision code có cấu trúc và giữ feedback tự do chỉ để hiển thị/diagnostic.
+
+Kết quả 20/20 chỉ chứng minh hệ thống đạt quality bar trên golden set hiện tại; không có nghĩa hệ thống đúng tuyệt đối với mọi câu trả lời ngoài tập. Lượt 4 đồng thời đổi model từ `gpt-4o-mini` sang `gpt-5-mini`, nên không quy toàn bộ mức tăng cho một thay đổi duy nhất.
 
 | Artifact | Nội dung |
 |---|---|
 | `eval/golden_set.json` | 20 ca, đủ 4 lớp chỗ khó; 10 ca phổ biến, 3 edge case, 12 ca dựa trên dữ liệu được cung cấp |
-| `eval/run_results.json` | Kết quả máy đọc được của từng ca |
-| `eval/run_results.md` | Tổng hợp 13 đạt, 7 chưa đạt và nguyên nhân từng ca |
-| `eval/run_logs.jsonl` | 20 prompt và phản hồi thô để xác minh kỹ thuật |
+| `eval/run_results.json`, `run_results_2.json`… | Kết quả máy đọc được từng lượt; không ghi đè lịch sử |
+| `eval/run_results.md`, `run_results_2.md`… | Bảng tổng hợp và nguyên nhân sai lệch từng lượt |
+| `eval/run_logs.jsonl`, `run_logs_2.jsonl`… | 20 prompt và phản hồi thô mỗi lượt để xác minh kỹ thuật |
 | `eval/demo_video.txt` | Link video thao tác CP3 khoảng 30 giây |
 
 Video demo: https://youtu.be/hwB9LhtTXoQ?si=2pS_2H8H7JgtXhdD

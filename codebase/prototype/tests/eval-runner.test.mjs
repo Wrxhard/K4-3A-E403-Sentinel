@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { access, mkdtemp, rm } from 'node:fs/promises';
+import { access, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
@@ -98,6 +98,30 @@ test('writes final JSON and Markdown only for a complete run', async () => {
     await writeRunArtifacts(run, directory);
     await access(path.join(directory, 'run_results.json'));
     await access(path.join(directory, 'run_results.md'));
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+});
+
+test('writes a numbered run without overwriting the first-run evidence', async () => {
+  const directory = await mkdtemp(path.join(tmpdir(), 'sentinel-eval-'));
+  try {
+    await writeFile(path.join(directory, 'run_results.json'), '{"run":"first"}\n', 'utf8');
+    const run = await executeEvaluation({
+      cases: [definition('GS-001')],
+      exercises,
+      reviewer: { review: async () => validReview },
+      model: 'gpt-5-mini',
+      now: () => new Date('2026-09-17T01:00:00.000Z'),
+    });
+
+    await writeRunArtifacts(run, directory, { runNumber: 2 });
+
+    assert.equal(await readFile(path.join(directory, 'run_results.json'), 'utf8'), '{"run":"first"}\n');
+    await access(path.join(directory, 'run_results_2.json'));
+    const markdown = await readFile(path.join(directory, 'run_results_2.md'), 'utf8');
+    assert.match(markdown, /kiểm thử lượt 2/i);
+    assert.match(markdown, /run_results_2\.json/);
   } finally {
     await rm(directory, { recursive: true, force: true });
   }

@@ -34,3 +34,38 @@ test('prompt requires direction without revealing the full answer on a failed re
   assert.match(request.instructions, /không được bịa/i);
 });
 
+test('emits a deterministic verdict precedence policy for ambiguous learner responses', () => {
+  const request = buildReviewRequest(validInput(), 'gpt-5-mini');
+  const payload = JSON.parse(request.input);
+
+  assert.deepEqual(payload.review_policy.classification_order, [
+    'out_of_scope',
+    'insufficient',
+    'misconception',
+    'correct',
+  ]);
+  assert.equal(payload.review_policy.correct_requires_explanation_independently, true);
+  assert.equal(payload.review_policy.selected_answer_cannot_compensate, true);
+});
+
+test('emits explicit guardrail outcomes for injection, empty content, and authority boundaries', () => {
+  const request = buildReviewRequest(validInput(), 'gpt-5-mini');
+  const payload = JSON.parse(request.input);
+
+  assert.equal(payload.review_policy.prompt_injection_verdict, 'insufficient');
+  assert.equal(payload.review_policy.non_semantic_content_verdict, 'insufficient');
+  assert.equal(payload.review_policy.unrelated_request_verdict, 'out_of_scope');
+  assert.equal(payload.review_policy.require_explicit_boundary_reason, true);
+  assert.equal(payload.review_policy.accept_concise_paraphrases, true);
+  assert.equal(payload.review_policy.accent_insensitive_semantics, true);
+  assert.deepEqual(
+    payload.classification_examples.map(({ kind, verdict }) => [kind, verdict]),
+    [
+      ['unrelated_or_unauthorized_request', 'out_of_scope'],
+      ['vague_or_non_semantic', 'insufficient'],
+      ['instruction_override', 'insufficient'],
+      ['specific_false_concept_claim', 'misconception'],
+      ['concise_correct_paraphrase', 'correct'],
+    ],
+  );
+});

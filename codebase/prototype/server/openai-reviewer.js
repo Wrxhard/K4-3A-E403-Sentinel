@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { validateReview, validateReviewInput } from './review-contract.js';
 import { buildReviewRequest } from './review-prompt.js';
+import { detectGuardrailSignal, enforceGuardrail } from './review-guardrails.js';
 import { appendTrace } from './runtime-log.js';
 
 const RESPONSES_URL = 'https://api.openai.com/v1/responses';
@@ -77,8 +78,12 @@ export function createOpenAIReviewer({
         }
 
         let parsed;
+        let modelReview;
+        const guardrailSignal = detectGuardrailSignal(input);
         try {
-          parsed = JSON.parse(extractOutputText(rawResponse));
+          modelReview = JSON.parse(extractOutputText(rawResponse));
+          validateReview(modelReview, input.teacher.sources.map((source) => source.id));
+          parsed = enforceGuardrail(modelReview, guardrailSignal, input);
           validateReview(parsed, input.teacher.sources.map((source) => source.id));
         } catch (cause) {
           if (cause instanceof ReviewServiceError) throw cause;
@@ -99,6 +104,8 @@ export function createOpenAIReviewer({
               http_status: httpStatus,
               prompt,
               raw_response: rawResponse,
+              model_review: modelReview,
+              guardrail_signal: guardrailSignal,
               parsed_review: parsed,
             },
             logPath,
